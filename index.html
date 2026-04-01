@@ -12,24 +12,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-        .stats {
-  display: flex;
-  justify-content: space-around;
-  padding: 50px;
-  background: #111;
-  color: white;
-  text-align: center;
-}
-
-.stat h2 {
-  font-size: 40px;
-  color: gold;
-}
-
-.stat p {
-  font-size: 18px;
-  margin-top: 10px;
-}
 
         body {
             font-family: 'Inter', sans-serif;
@@ -545,6 +527,29 @@
             margin-top: 1rem;
         }
 
+        /* Form messages */
+        .form-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        .form-message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+
+        .form-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -584,25 +589,6 @@
         html[dir="rtl"] {
             direction: rtl;
         }
-
-        .form-message {
-            margin-top: 1rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .form-message.success {
-            display: block;
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .form-message.error {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
-        }
     </style>
 </head>
 <body>
@@ -641,22 +627,7 @@
             </div>
         </div>
     </section>
-<section class="stats">
-  <div class="stat">
-    <h2 class="counter" data-target="1200">0</h2>
-    <p>Visiteurs</p>
-  </div>
 
-  <div class="stat">
-    <h2 class="counter" data-target="85">0</h2>
-    <p>Œuvres</p>
-  </div>
-
-  <div class="stat">
-    <h2 class="counter" data-target="15">0</h2>
-    <p>Artistes</p>
-  </div>
-</section>
     <div class="container" id="produits">
         <div class="section-header">
             <div class="section-tag" id="productsTag">Notre Catalogue</div>
@@ -735,27 +706,27 @@
             </div>
             
             <div class="contact-form">
-                <form id="contactForm">
+                <form id="contactForm" method="POST">
                     <div class="form-group">
-                        <input type="text" id="name" placeholder="Nom complet" required>
+                        <input type="text" name="name" id="name" placeholder="Nom complet" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" placeholder="Email" required>
+                        <input type="email" name="email" id="email" placeholder="Email" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" id="phone" placeholder="Téléphone">
+                        <input type="tel" name="phone" id="phone" placeholder="Téléphone">
                     </div>
                     <div class="form-group">
-                        <select id="subject" required>
+                        <select name="subject" id="subject" required>
                             <option value="devis">Demande de devis</option>
                             <option value="information">Demande d'information</option>
                             <option value="rdv">Prise de rendez-vous</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <textarea id="message" rows="5" placeholder="Votre message" required></textarea>
+                        <textarea name="message" id="message" rows="5" placeholder="Votre message" required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">Envoyer le message</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Envoyer le message <i class="fas fa-paper-plane"></i></button>
                     <div id="formMessage" class="form-message"></div>
                 </form>
             </div>
@@ -780,10 +751,12 @@
                 <div class="footer-section">
                     <h4 id="footerNewsletter">Newsletter</h4>
                     <p id="footerNewsletterText">Recevez nos offres spéciales</p>
-                    <div class="newsletter-form">
-                        <input type="email" id="newsletterEmail" placeholder="Votre email">
-                        <button id="newsletterBtn" class="submit-btn" style="margin-top: 0.5rem;">S'abonner</button>
-                    </div>
+                    <form id="newsletterForm" method="POST">
+                        <div class="newsletter-form" style="display: flex; gap: 0.5rem;">
+                            <input type="email" name="email" id="newsletterEmail" placeholder="Votre email" required style="flex: 1; padding: 0.75rem; border: none; border-radius: 50px;">
+                            <button type="submit" class="submit-btn" style="margin-top: 0; padding: 0.75rem 1.25rem;">S'abonner</button>
+                        </div>
+                    </form>
                     <div id="newsletterMessage" class="form-message"></div>
                 </div>
             </div>
@@ -972,7 +945,6 @@
         function applyTranslations() {
             const t = translations[currentLang];
             
-            // Mettre à jour tous les éléments avec ID
             document.getElementById('logo').innerHTML = t.logo;
             document.getElementById('navHome').textContent = t.nav_home;
             document.getElementById('navProducts').textContent = t.nav_products;
@@ -1015,20 +987,19 @@
             document.getElementById('footerNewsletterText').textContent = t.footer_newsletter_text;
             document.getElementById('footerCopyright').textContent = t.footer_copyright;
             
-            // Placeholders
             document.querySelector('#name').placeholder = t.contact_form_name;
             document.querySelector('#email').placeholder = t.contact_form_email;
             document.querySelector('#phone').placeholder = t.contact_form_phone;
             document.querySelector('#message').placeholder = t.contact_form_message;
             document.querySelector('#newsletterEmail').placeholder = t.footer_newsletter_placeholder;
             
-            // Options du select
             const subjectSelect = document.querySelector('#subject');
-            subjectSelect.options[0].text = t.contact_form_quote;
-            subjectSelect.options[1].text = t.contact_form_info;
-            subjectSelect.options[2].text = t.contact_form_appointment;
+            if(subjectSelect) {
+                subjectSelect.options[0].text = t.contact_form_quote;
+                subjectSelect.options[1].text = t.contact_form_info;
+                subjectSelect.options[2].text = t.contact_form_appointment;
+            }
             
-            // Re-rendre les produits
             renderProducts();
         }
 
@@ -1077,13 +1048,25 @@
             document.getElementById('productModal').style.display = 'none';
         }
 
+        // Fonction pour afficher les messages
+        function showMessage(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = message;
+                el.className = `form-message ${type}`;
+                setTimeout(() => {
+                    el.className = 'form-message';
+                    el.textContent = '';
+                }, 5000);
+            }
+        }
+
         // Changer la langue
         function setLanguage(lang) {
             if (!translations[lang]) return;
             currentLang = lang;
             localStorage.setItem('language', lang);
             
-            // Mettre à jour les boutons actifs
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.lang === lang) {
@@ -1091,7 +1074,6 @@
                 }
             });
             
-            // Direction pour l'arabe
             if (lang === 'ar') {
                 document.documentElement.setAttribute('dir', 'rtl');
             } else {
@@ -1101,7 +1083,67 @@
             applyTranslations();
         }
 
-        // Initialisation
+        // ==================== GESTION DES FORMULAIRES AVEC PHP ====================
+        
+        // Formulaire de contact
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(contactForm);
+                
+                try {
+                    const response = await fetch('save_contact.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showMessage('formMessage', result.message, 'success');
+                        contactForm.reset();
+                    } else {
+                        showMessage('formMessage', result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    showMessage('formMessage', 'Erreur de connexion au serveur', 'error');
+                }
+            });
+        }
+        
+        // Formulaire newsletter
+        const newsletterForm = document.getElementById('newsletterForm');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(newsletterForm);
+                
+                try {
+                    const response = await fetch('save_newsletter.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showMessage('newsletterMessage', result.message, 'success');
+                        newsletterForm.reset();
+                    } else {
+                        showMessage('newsletterMessage', result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    showMessage('newsletterMessage', 'Erreur de connexion au serveur', 'error');
+                }
+            });
+        }
+
+        // ==================== INITIALISATION ====================
         document.addEventListener('DOMContentLoaded', function() {
             // Charger la langue sauvegardée
             const savedLang = localStorage.getItem('language') || 'fr';
@@ -1182,46 +1224,17 @@
                 });
             });
             
-            // Fermer modal au clic sur X
-            document.querySelector('.close-modal').addEventListener('click', closeModal);
+            // Fermer modal
+            const closeModalBtn = document.querySelector('.close-modal');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeModal);
+            }
             window.onclick = (e) => {
                 const modal = document.getElementById('productModal');
                 if (e.target === modal) closeModal();
             };
-            
-            // Formulaire de contact
-            const contactForm = document.getElementById('contactForm');
-            if (contactForm) {
-                contactForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const name = document.getElementById('name').value;
-                    const email = document.getElementById('email').value;
-                    const message = document.getElementById('message').value;
-                    
-                    if (!name || !email || !message) {
-                        showMessage('formMessage', 'Veuillez remplir tous les champs', 'error');
-                        return;
-                    }
-                    
-                    showMessage('formMessage', 'Message envoyé avec succès !', 'success');
-                    contactForm.reset();
-                });
-            }
-            
-            function showMessage(elementId, message, type) {
-                const el = document.getElementById(elementId);
-                if (el) {
-                    el.textContent = message;
-                    el.className = `form-message ${type}`;
-                    setTimeout(() => {
-                        el.className = 'form-message';
-                        el.textContent = '';
-                    }, 3000);
-                }
-            }
         });
     </script>
     <script src="ai-assistant.js"></script>
-    <script src="stat.jsgi"></script>
 </body>
 </html>
