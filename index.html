@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dar El Founoun - Imprimerie d'art</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles pour l'assistant AI -->
+<style>
+    .ai-assistant {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .ai-toggle {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #e67e22, #f39c12);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(230,126,34,0.3);
+        transition: all 0.3s ease;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .ai-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 35px rgba(230,126,34,0.4);
+    }
+
+    .ai-toggle i {
+        font-size: 28px;
+        color: white;
+    }
+
+    .ai-chat-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 380px;
+        height: 550px;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transform: scale(0);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transform-origin: bottom right;
+        z-index: 9998;
+    }
+
+    .ai-chat-window.open {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .ai-chat-header {
+        background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+        color: white;
+        padding: 1rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .ai-chat-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .ai-chat-header h3 i {
+        color: #e67e22;
+    }
+
+    .ai-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 5px;
+        transition: 0.3s;
+    }
+
+    .ai-close:hover {
+        transform: rotate(90deg);
+    }
+
+    .ai-chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        background: #f8fafc;
+    }
+
+    .ai-message {
+        margin-bottom: 1rem;
+        display: flex;
+        animation: messageSlide 0.3s ease;
+    }
+
+    @keyframes messageSlide {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .ai-message.user {
+        justify-content: flex-end;
+    }
+
+    .ai-message.bot {
+        justify-content: flex-start;
+    }
+
+    .ai-message-content {
+        max-width: 85%;
+        padding: 0.75rem 1rem;
+        border-radius: 18px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        white-space: pre-line;
+    }
+
+    .ai-message.user .ai-message-content {
+        background: linear-gradient(135deg, #e67e22, #f39c12);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    .ai-message.bot .ai-message-content {
+        background: white;
+        color: #1e293b;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+    .ai-typing {
+        display: flex;
+        gap: 4px;
+        padding: 0.75rem 1rem;
+        background: white;
+        border-radius: 18px;
+        width: fit-content;
+        border: 1px solid #e2e8f0;
+    }
+
+    .ai-typing span {
+        width: 8px;
+        height: 8px;
+        background: #e67e22;
+        border-radius: 50%;
+        animation: typing 1.4s infinite ease;
+    }
+
+    .ai-typing span:nth-child(1) { animation-delay: 0s; }
+    .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+        30% { transform: translateY(-8px); opacity: 1; }
+    }
+
+    .ai-chat-input {
+        padding: 1rem;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .ai-chat-input input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 50px;
+        outline: none;
+        font-family: inherit;
+        transition: 0.3s;
+    }
+
+    .ai-chat-input input:focus {
+        border-color: #e67e22;
+    }
+
+    .ai-chat-input button {
+        padding: 0.75rem 1.25rem;
+        background: linear-gradient(135deg, #e67e22, #f39c12);
+        border: none;
+        border-radius: 50px;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .ai-chat-input button:hover {
+        transform: translateY(-2px);
+    }
+
+    .ai-suggestions {
+        padding: 0.75rem;
+        background: #f1f5f9;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .ai-suggestion-btn {
+        padding: 0.4rem 0.8rem;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .ai-suggestion-btn:hover {
+        background: #e67e22;
+        color: white;
+        border-color: #e67e22;
+    }
+
+    @media (max-width: 480px) {
+        .ai-chat-window {
+            width: calc(100vw - 40px);
+            right: 20px;
+            bottom: 80px;
+            height: 500px;
+        }
+        
+        .ai-assistant {
+            right: 20px;
+            bottom: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header>
+        <nav>
+            <div class="logo">Dar El <span>Founoun</span></div>
+            <ul class="nav-links">
+                <li><a href="#accueil" class="nav-link">Accueil</a></li>
+                <li><a href="#produits" class="nav-link">Produits</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero" id="accueil">
+        <div class="hero-bg">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">✨ Excellence depuis 1995</div>
+            <h1 class="hero-title">
+                Dar El <span class="gradient-text">Founoun</span>
+            </h1>
+            <p class="hero-subtitle">L'élégance de l'impression, la beauté de l'art</p>
+            <p class="hero-description">Découvrez notre collection exclusive de produits d'impression haut de gamme</p>
+            <div class="hero-buttons">
+                <a href="#produits" class="btn-primary">
+                    <span>Découvrir nos produits</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#contact" class="btn-secondary">Nous contacter</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-mouse"></div>
+            <span>Défiler</span>
+        </div>
+    </section>
+
+    <div class="container" id="produits">
+        <div class="section-header">
+            <div class="section-tag">Notre Catalogue</div>
+            <h2 class="section-title">Nos Produits <span class="highlight">d'Exception</span></h2>
+            <p class="section-subtitle">Des créations uniques pour tous vos besoins d'impression</p>
+        </div>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-category="all"><i class="fas fa-th-large"></i> Tous (24)</button>
+            <button class="filter-btn" data-category="papeterie"><i class="fas fa-envelope"></i> Papeterie (8)</button>
+            <button class="filter-btn" data-category="publicitaire"><i class="fas fa-chart-line"></i> Publicitaire (6)</button>
+            <button class="filter-btn" data-category="luxe"><i class="fas fa-gem"></i> Luxe (5)</button>
+            <button class="filter-btn" data-category="art"><i class="fas fa-palette"></i> Art & Design (5)</button>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" data-target="8500">0</div>
+                <div class="stat-label">Clients satisfaits</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="25000">0</div>
+                <div class="stat-label">Projets réalisés</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="29">0</div>
+                <div class="stat-label">Années d'expertise</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="150">0</div>
+                <div class="stat-label">Partenaires</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-section" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="section-tag">Contactez-nous</div>
+                <h2 class="section-title">Parlons de <span class="highlight">votre projet</span></h2>
+                <p class="contact-description">Notre équipe est à votre écoute pour tous vos besoins d'impression. Remplissez le formulaire ou contactez-nous directement.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <h4>Adresse</h4>
+                            <p>12 Rue de la Liberté, Centre Urbain Nord, Tunis, Tunisie</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div>
+                            <h4>Téléphone</h4>
+                            <p>+216 71 123 456</p>
+                            <p>+216 98 765 432</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>contact@darelfounoun.tn</p>
+                            <p>commercial@darelfounoun.tn</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <h4>Horaires</h4>
+                            <p>Lun-Ven: 8h30 - 18h00</p>
+                            <p>Sam: 9h00 - 13h00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" required>
+                        <label>Nom complet</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" required>
+                        <label>Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone">
+                        <label>Téléphone</label>
+                    </div>
+                    <div class="form-group">
+                        <select id="subject" required>
+                            <option value="">Sélectionnez un sujet</option>
+                            <option value="devis">Demande de devis</option>
+                            <option value="information">Demande d'information</option>
+                            <option value="rdv">Prise de rendez-vous</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                        <label>Sujet</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" rows="5" required></textarea>
+                        <label>Votre message</label>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <span>Envoyer le message</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <div id="formMessage" class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-section">
+                    <h4>Dar El Founoun</h4>
+                    <p>Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995. Qualité, créativité et excellence.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="#accueil">Accueil</a></li>
+                        <li><a href="#produits">Nos produits</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">Devis en ligne</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Recevez nos offres spéciales</p>
+                    <div class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="Votre email">
+                        <button id="newsletterBtn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                    <div id="newsletterMessage" class="form-message"></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dar El Founoun - Tous droits réservés | Design créatif par l'équipe Dar El Founoun</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== PRODUITS ====================
+        const products = [
+            { id: 1, name: "Cartes de Visite Premium", desc: "Papier luxe 350g, finition mate ou brillante", price: "Dès 50 DT", category: "papeterie", icon: "fa-id-card", details: "Impression recto-verso, vernis sélectif disponible. Personnalisation complète avec votre logo." },
+            { id: 2, name: "Enveloppes Personnalisées", desc: "Papier recyclé ou luxe, fenêtre ou non", price: "Dès 40 DT/100", category: "papeterie", icon: "fa-envelope", details: "Personnalisation avec votre logo. Plusieurs formats et papiers au choix." },
+            { id: 3, name: "Blocs Notes", desc: "Papier recyclé, couverture cartonnée", price: "Dès 15 DT", category: "papeterie", icon: "fa-book", details: "Idéal pour vos prises de notes. Personnalisation du logo disponible." },
+            { id: 4, name: "Papier à En-tête", desc: "Papier 80g, filigrane disponible", price: "Dès 30 DT/500", category: "papeterie", icon: "fa-file-alt", details: "Papier professionnel avec en-tête personnalisé." },
+            { id: 5, name: "Carnets Moleskine", desc: "Carnets luxe, couverture rigide", price: "Dès 25 DT", category: "papeterie", icon: "fa-notebook", details: "Carnets haut de gamme, élastique de fermeture." },
+            { id: 6, name: "Chemises Cartonnées", desc: "Carton 350g, rabats personnalisés", price: "Dès 45 DT/100", category: "papeterie", icon: "fa-folder", details: "Parfait pour vos dossiers professionnels." },
+            { id: 7, name: "Pochette Présentation", desc: "Plastique ou carton, fenêtre", price: "Dès 35 DT/50", category: "papeterie", icon: "fa-folder-open", details: "Idéal pour la présentation de vos documents." },
+            { id: 8, name: "Stickers Personnalisés", desc: "Vinyle ou papier, découpe sur mesure", price: "Dès 20 DT/50", category: "papeterie", icon: "fa-tag", details: "Stickers pour tous usages. Résistants à l'eau." },
+            { id: 9, name: "Flyers Publicitaires", desc: "Format A5, papier couché 135g", price: "Dès 80 DT/1000", category: "publicitaire", icon: "fa-file-pdf", details: "Idéal pour vos campagnes marketing." },
+            { id: 10, name: "Roll-up Professionnel", desc: "Stand d'exposition, sacoche incluse", price: "Dès 120 DT", category: "publicitaire", icon: "fa-chart-line", details: "Idéal pour salons et événements." },
+            { id: 11, name: "Bâches Publicitaires", desc: "Grand format, œillets renforcés", price: "Dès 25 DT/m²", category: "publicitaire", icon: "fa-flag", details: "Résistantes aux intempéries." },
+            { id: 12, name: "Panneaux LED", desc: "Éclairage intégré, sur-mesure", price: "Sur devis", category: "publicitaire", icon: "fa-lightbulb", details: "Panneaux lumineux pour une visibilité maximale." },
+            { id: 13, name: "Calendriers Publicitaires", desc: "Mur ou bureau, personnalisation", price: "Dès 45 DT/50", category: "publicitaire", icon: "fa-calendar-alt", details: "Calendriers personnalisés avec votre logo." },
+            { id: 14, name: "Goodies Personnalisés", desc: "Mugs, stylos, porte-clés", price: "Dès 5 DT", category: "publicitaire", icon: "fa-gift", details: "Large choix d'articles publicitaires." },
+            { id: 15, name: "Catalogue de Luxe", desc: "Reliure cousue, papier texturé", price: "Sur devis", category: "luxe", icon: "fa-book-open", details: "Finition haut de gamme pour vos collections." },
+            { id: 16, name: "Faire-part Mariage", desc: "Découpe laser, ruban satin", price: "Dès 3 DT/pièce", category: "luxe", icon: "fa-heart", details: "Personnalisation complète. Papier texturé." },
+            { id: 17, name: "Albums Photo Premium", desc: "Couverture cuir, dorure", price: "Dès 85 DT", category: "luxe", icon: "fa-camera", details: "Albums haut de gamme pour vos souvenirs." },
+            { id: 18, name: "Diplômes Certificats", desc: "Papier parchemin, sceau", price: "Dès 15 DT", category: "luxe", icon: "fa-scroll", details: "Diplômes personnalisés avec cachet officiel." },
+            { id: 19, name: "Emballages Luxe", desc: "Boîtes sur-mesure, rubans", price: "Dès 8 DT", category: "luxe", icon: "fa-box", details: "Emballages premium pour vos produits." },
+            { id: 20, name: "Affiches Artistiques", desc: "Grand format, impression UV", price: "Dès 35 DT", category: "art", icon: "fa-palette", details: "Impression sur support rigide ou souple." },
+            { id: 21, name: "Toiles d'Art", desc: "Impression sur toile, châssis bois", price: "Dès 65 DT", category: "art", icon: "fa-paintbrush", details: "Reproductions d'œuvres d'art." },
+            { id: 22, name: "Posters d'Art", desc: "Papier d'art 250g, finition mate", price: "Dès 25 DT", category: "art", icon: "fa-image", details: "Posters haute qualité pour la décoration." },
+            { id: 23, name: "Portfolios Artistes", desc: "Reliure spirale, pochettes", price: "Dès 55 DT", category: "art", icon: "fa-folder-open", details: "Idéal pour les artistes et photographes." },
+            { id: 24, name: "Livres d'Art", desc: "Impression fine art, reliure luxe", price: "Sur devis", category: "art", icon: "fa-book", details: "Livres d'art haut de gamme." }
+        ];
+
+        let currentCategory = 'all';
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            if (!grid) return;
+            const filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card" data-id="${p.id}">
+                    <div class="product-image">
+                        <div class="product-icon"><i class="fas ${p.icon}"></i></div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${p.name}</h3>
+                        <p class="product-desc">${p.desc}</p>
+                        <div class="product-price">${p.price}</div>
+                        <button class="product-btn" onclick="showProductDetails(${p.id})">En savoir plus <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showProductDetails(id) {
+            const p = products.find(p => p.id === id);
+            const modal = document.getElementById('productModal');
+            document.getElementById('modalContent').innerHTML = `
+                <div class="modal-image"><i class="fas ${p.icon}"></i></div>
+                <h2 class="modal-title">${p.name}</h2>
+                <div class="modal-badge">${p.category === 'papeterie' ? 'Papeterie' : p.category === 'publicitaire' ? 'Publicitaire' : p.category === 'luxe' ? 'Luxe' : 'Art & Design'}</div>
+                <p class="modal-desc">${p.desc}</p>
+                <div class="modal-price">${p.price}</div>
+                <p class="modal-details">${p.details}</p>
+                <button class="modal-close-btn" onclick="closeModal()">Fermer</button>
+            `;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // ==================== FORMULAIRES AVEC BASE DE DONNÉES ====================
+        
+        // Formulaire de contact
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                
+                // Validation
+                if (!name || !email || !message) {
+                    showMessage('formMessage', '❌ Veuillez remplir tous les champs obligatoires', 'error');
+                    return;
+                }
+                
+                if (!email.includes('@') || !email.includes('.')) {
+                    showMessage('formMessage', '❌ Veuillez entrer un email valide', 'error');
+                    return;
+                }
+                
+                const submitBtn = document.querySelector('.submit-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+                submitBtn.disabled = true;
+                
+                try {
+                    const response = await fetch('save_contact.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, phone, subject, message })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showMessage('formMessage', result.message, 'success');
+                        contactForm.reset();
+                    } else {
+                        showMessage('formMessage', result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    showMessage('formMessage', '❌ Erreur de connexion au serveur. Vérifiez que Apache est démarré.', 'error');
+                }
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+        
+        // Newsletter
+        const newsletterBtn = document.getElementById('newsletterBtn');
+        if (newsletterBtn) {
+            newsletterBtn.addEventListener('click', async () => {
+                const email = document.getElementById('newsletterEmail').value;
+                
+                if (!email) {
+                    showMessage('newsletterMessage', '❌ Veuillez entrer votre email', 'error');
+                    return;
+                }
+                
+                if (!email.includes('@') || !email.includes('.')) {
+                    showMessage('newsletterMessage', '❌ Veuillez entrer un email valide', 'error');
+                    return;
+                }
+                
+                const originalText = newsletterBtn.innerHTML;
+                newsletterBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                newsletterBtn.disabled = true;
+                
+                try {
+                    const response = await fetch('save_newsletter.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    
+                    const result = await response.json();
+                    showMessage('newsletterMessage', result.message, result.success ? 'success' : 'error');
+                    
+                    if (result.success) {
+                        document.getElementById('newsletterEmail').value = '';
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    showMessage('newsletterMessage', '❌ Erreur de connexion au serveur. Vérifiez que Apache est démarré.', 'error');
+                }
+                
+                newsletterBtn.innerHTML = originalText;
+                newsletterBtn.disabled = false;
+            });
+        }
+        
+        function showMessage(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = message;
+                el.className = `form-message ${type}`;
+                setTimeout(() => {
+                    el.className = 'form-message';
+                    el.textContent = '';
+                }, 5000);
+            }
+        }
+
+        // ==================== ANIMATIONS ====================
+        function animateStats() {
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                const target = parseInt(stat.dataset.target);
+                let current = 0;
+                const increment = target / 50;
+                const update = () => {
+                    if (current < target) {
+                        current += increment;
+                        stat.textContent = Math.ceil(current);
+                        requestAnimationFrame(update);
+                    } else {
+                        stat.textContent = target.toLocaleString();
+                    }
+                };
+                update();
+            });
+        }
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) animateStats();
+        }, { threshold: 0.5 });
+        
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) statsObserver.observe(statsSection);
+
+        // Curseur personnalisé
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        
+        if (cursor && follower) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                follower.style.left = e.clientX + 'px';
+                follower.style.top = e.clientY + 'px';
+            });
+            
+            document.querySelectorAll('a, button, .product-card, .filter-btn').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    follower.style.width = '60px';
+                    follower.style.height = '60px';
+                });
+                el.addEventListener('mouseleave', () => {
+                    follower.style.width = '40px';
+                    follower.style.height = '40px';
+                });
+            });
+        }
+
+        // Filtres
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                renderProducts();
+            });
+        });
+
+        // Menu mobile
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (header) {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Modal close
+        window.onclick = (e) => {
+            const modal = document.getElementById('productModal');
+            if (e.target === modal) closeModal();
+        };
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Animation au scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.product-card, .stat-item, .footer-section, .contact-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialisation
+        renderProducts();
+    </script>
+    <script src="ai-assistant.js"></script>
+</body>
+</html>
