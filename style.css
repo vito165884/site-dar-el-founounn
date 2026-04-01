@@ -924,3 +924,56 @@ footer {
     .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
     .stats-container { grid-template-columns: 1fr; }
 }
+/* Styles pour l'arabe (RTL) */
+html[dir="rtl"] {
+    direction: rtl;
+    font-family: 'Cairo', 'Inter', sans-serif;
+}
+
+html[dir="rtl"] .nav-links {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .hero-buttons .btn-primary i,
+html[dir="rtl"] .hero-buttons .btn-secondary i {
+    transform: scaleX(-1);
+}
+
+html[dir="rtl"] .product-card .product-btn i {
+    transform: scaleX(-1);
+}
+
+html[dir="rtl"] .contact-item:hover {
+    transform: translateX(-10px);
+}
+
+html[dir="rtl"] .social-links {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .newsletter-form button {
+    border-radius: 50px;
+}
+
+html[dir="rtl"] .ai-message.user .ai-message-content {
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 4px;
+}
+
+html[dir="rtl"] .ai-message.bot .ai-message-content {
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 4px;
+}
+
+/* Ajustements pour mobile en RTL */
+@media (max-width: 768px) {
+    html[dir="rtl"] .nav-links {
+        margin-right: 0;
+    }
+    
+    html[dir="rtl"] .menu-toggle {
+        margin-left: 0;
+        margin-right: auto;
+    }
+}

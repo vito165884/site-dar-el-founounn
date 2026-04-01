@@ -4,278 +4,604 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dar El Founoun - Imprimerie d'art</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Styles pour l'assistant AI -->
-<style>
-    .ai-assistant {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        z-index: 9999;
-        font-family: 'Inter', sans-serif;
-    }
-
-    .ai-toggle {
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #e67e22, #f39c12);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 10px 25px rgba(230,126,34,0.3);
-        transition: all 0.3s ease;
-        animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-    .ai-toggle:hover {
-        transform: scale(1.1);
-        box-shadow: 0 15px 35px rgba(230,126,34,0.4);
-    }
-
-    .ai-toggle i {
-        font-size: 28px;
-        color: white;
-    }
-
-    .ai-chat-window {
-        position: fixed;
-        bottom: 100px;
-        right: 30px;
-        width: 380px;
-        height: 550px;
-        background: white;
-        border-radius: 24px;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        transform: scale(0);
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        transform-origin: bottom right;
-        z-index: 9998;
-    }
-
-    .ai-chat-window.open {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    .ai-chat-header {
-        background: linear-gradient(135deg, #1a2a3a, #0f1a24);
-        color: white;
-        padding: 1rem 1.25rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .ai-chat-header h3 {
-        margin: 0;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .ai-chat-header h3 i {
-        color: #e67e22;
-    }
-
-    .ai-close {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 5px;
-        transition: 0.3s;
-    }
-
-    .ai-close:hover {
-        transform: rotate(90deg);
-    }
-
-    .ai-chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 1rem;
-        background: #f8fafc;
-    }
-
-    .ai-message {
-        margin-bottom: 1rem;
-        display: flex;
-        animation: messageSlide 0.3s ease;
-    }
-
-    @keyframes messageSlide {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
         }
-    }
 
-    .ai-message.user {
-        justify-content: flex-end;
-    }
-
-    .ai-message.bot {
-        justify-content: flex-start;
-    }
-
-    .ai-message-content {
-        max-width: 85%;
-        padding: 0.75rem 1rem;
-        border-radius: 18px;
-        font-size: 0.9rem;
-        line-height: 1.4;
-        white-space: pre-line;
-    }
-
-    .ai-message.user .ai-message-content {
-        background: linear-gradient(135deg, #e67e22, #f39c12);
-        color: white;
-        border-bottom-right-radius: 4px;
-    }
-
-    .ai-message.bot .ai-message-content {
-        background: white;
-        color: #1e293b;
-        border-bottom-left-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        border: 1px solid #e2e8f0;
-    }
-
-    .ai-typing {
-        display: flex;
-        gap: 4px;
-        padding: 0.75rem 1rem;
-        background: white;
-        border-radius: 18px;
-        width: fit-content;
-        border: 1px solid #e2e8f0;
-    }
-
-    .ai-typing span {
-        width: 8px;
-        height: 8px;
-        background: #e67e22;
-        border-radius: 50%;
-        animation: typing 1.4s infinite ease;
-    }
-
-    .ai-typing span:nth-child(1) { animation-delay: 0s; }
-    .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
-    .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes typing {
-        0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-        30% { transform: translateY(-8px); opacity: 1; }
-    }
-
-    .ai-chat-input {
-        padding: 1rem;
-        background: white;
-        border-top: 1px solid #e2e8f0;
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .ai-chat-input input {
-        flex: 1;
-        padding: 0.75rem 1rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 50px;
-        outline: none;
-        font-family: inherit;
-        transition: 0.3s;
-    }
-
-    .ai-chat-input input:focus {
-        border-color: #e67e22;
-    }
-
-    .ai-chat-input button {
-        padding: 0.75rem 1.25rem;
-        background: linear-gradient(135deg, #e67e22, #f39c12);
-        border: none;
-        border-radius: 50px;
-        color: white;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .ai-chat-input button:hover {
-        transform: translateY(-2px);
-    }
-
-    .ai-suggestions {
-        padding: 0.75rem;
-        background: #f1f5f9;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        border-top: 1px solid #e2e8f0;
-    }
-
-    .ai-suggestion-btn {
-        padding: 0.4rem 0.8rem;
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .ai-suggestion-btn:hover {
-        background: #e67e22;
-        color: white;
-        border-color: #e67e22;
-    }
-
-    @media (max-width: 480px) {
-        .ai-chat-window {
-            width: calc(100vw - 40px);
-            right: 20px;
-            bottom: 80px;
-            height: 500px;
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.4s ease;
+            background: rgba(26, 42, 58, 0.95);
+            backdrop-filter: blur(10px);
         }
-        
-        .ai-assistant {
-            right: 20px;
-            bottom: 20px;
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
         }
-    }
-</style>
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #e67e22;
+        }
+
+        /* Sélecteur de langue */
+        .language-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 1rem;
+        }
+
+        .lang-btn {
+            padding: 0.4rem 0.8rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            border-color: transparent;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+
+        .hero-content {
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .hero-description {
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(230,126,34,0.4);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-left: 1rem;
+            transition: 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #1a2a3a;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: rgba(230,126,34,0.1);
+            color: #e67e22;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Filtres */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+        }
+
+        /* Produits */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-icon {
+            font-size: 4rem;
+            color: white;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e67e22;
+            margin-bottom: 1rem;
+        }
+
+        .product-btn {
+            width: 100%;
+            padding: 0.7rem;
+            background: transparent;
+            border: 2px solid #e67e22;
+            color: #e67e22;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .product-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Stats */
+        .stats-section {
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            padding: 4rem 2rem;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        .stat-label {
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Contact */
+        .contact-section {
+            padding: 5rem 2rem;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-details {
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(230,126,34,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #e67e22;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #e67e22;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a2a3a;
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #e67e22;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            color: #94a3b8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+
+        .footer-section ul li a:hover {
+            color: #e67e22;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .modal-close-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            .language-selector {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .btn-secondary {
+                margin-left: 0;
+            }
+        }
+
+        html[dir="rtl"] {
+            direction: rtl;
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .form-message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .form-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
 </head>
 <body>
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
-
     <header>
         <nav>
-            <div class="logo">Dar El <span>Founoun</span></div>
-            <ul class="nav-links">
-                <li><a href="#accueil" class="nav-link">Accueil</a></li>
-                <li><a href="#produits" class="nav-link">Produits</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+            <div class="logo" id="logo">Dar El <span>Founoun</span></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#accueil" id="navHome">Accueil</a></li>
+                <li><a href="#produits" id="navProducts">Produits</a></li>
+                <li><a href="#contact" id="navContact">Contact</a></li>
             </ul>
-            <div class="menu-toggle">
+            <div class="language-selector" id="languageSelector">
+                <button class="lang-btn active" data-lang="fr">🇫🇷 FR</button>
+                <button class="lang-btn" data-lang="ar">🇹🇳 عربي</button>
+                <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -284,74 +610,58 @@
     </header>
 
     <section class="hero" id="accueil">
-        <div class="hero-bg">
-            <div class="circle circle-1"></div>
-            <div class="circle circle-2"></div>
-            <div class="circle circle-3"></div>
-        </div>
         <div class="hero-content">
-            <div class="hero-badge">✨ Excellence depuis 1994</div>
+            <div class="hero-badge" id="heroBadge">✨ Excellence depuis 1995</div>
             <h1 class="hero-title">
-                Dar El <span class="gradient-text">Founoun</span>
+                <span id="heroTitle">Dar El</span> <span class="gradient-text" id="heroTitleGradient">Founoun</span>
             </h1>
-            <p class="hero-subtitle">L'élégance de l'impression, la beauté de l'art</p>
-            <p class="hero-description">Découvrez notre collection exclusive de produits d'impression haut de gamme</p>
+            <p class="hero-subtitle" id="heroSubtitle">L'élégance de l'impression, la beauté de l'art</p>
+            <p class="hero-description" id="heroDescription">Découvrez notre collection exclusive de produits d'impression haut de gamme</p>
             <div class="hero-buttons">
-                <a href="#produits" class="btn-primary">
-                    <span>Découvrir nos produits</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="#contact" class="btn-secondary">Nous contacter</a>
+                <a href="#produits" class="btn-primary" id="heroBtnProducts">Découvrir nos produits <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="btn-secondary" id="heroBtnContact">Nous contacter</a>
             </div>
-        </div>
-        <div class="hero-scroll">
-            <div class="scroll-mouse"></div>
-            <span>Défiler</span>
         </div>
     </section>
 
     <div class="container" id="produits">
         <div class="section-header">
-            <div class="section-tag">Notre Catalogue</div>
-            <h2 class="section-title">Nos Produits <span class="highlight">d'Exception</span></h2>
-            <p class="section-subtitle">Des créations uniques pour tous vos besoins d'impression</p>
+            <div class="section-tag" id="productsTag">Notre Catalogue</div>
+            <h2 class="section-title">
+                <span id="productsTitle">Nos Produits</span> 
+                <span class="highlight" id="productsTitleHighlight">d'Exception</span>
+            </h2>
+            <p class="section-subtitle" id="productsSubtitle">Des créations uniques pour tous vos besoins d'impression</p>
         </div>
         
-        <div class="filters">
-            <button class="filter-btn active" data-category="all"><i class="fas fa-th-large"></i> Tous (24)</button>
-            <button class="filter-btn" data-category="papeterie"><i class="fas fa-envelope"></i> Papeterie (8)</button>
-            <button class="filter-btn" data-category="publicitaire"><i class="fas fa-chart-line"></i> Publicitaire (6)</button>
-            <button class="filter-btn" data-category="luxe"><i class="fas fa-gem"></i> Luxe (5)</button>
-            <button class="filter-btn" data-category="art"><i class="fas fa-palette"></i> Art & Design (5)</button>
+        <div class="filters" id="filters">
+            <button class="filter-btn active" data-category="all" id="filterAll"><i class="fas fa-th-large"></i> Tous (24)</button>
+            <button class="filter-btn" data-category="papeterie" id="filterStationery"><i class="fas fa-envelope"></i> Papeterie (8)</button>
+            <button class="filter-btn" data-category="publicitaire" id="filterAdvertising"><i class="fas fa-chart-line"></i> Publicitaire (6)</button>
+            <button class="filter-btn" data-category="luxe" id="filterLuxury"><i class="fas fa-gem"></i> Luxe (5)</button>
+            <button class="filter-btn" data-category="art" id="filterArt"><i class="fas fa-palette"></i> Art & Design (5)</button>
         </div>
 
         <div class="products-grid" id="productsGrid"></div>
     </div>
 
-    <div id="productModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
     <div class="stats-section">
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-number" data-target="8500">0</div>
-                <div class="stat-label">Clients satisfaits</div>
+                <div class="stat-number" id="stat1" data-target="8500">0</div>
+                <div class="stat-label" id="statLabel1">Clients satisfaits</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" data-target="25000">0</div>
-                <div class="stat-label">Projets réalisés</div>
+                <div class="stat-number" id="stat2" data-target="25000">0</div>
+                <div class="stat-label" id="statLabel2">Projets réalisés</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" data-target="29">0</div>
-                <div class="stat-label">Années d'expertise</div>
+                <div class="stat-number" id="stat3" data-target="29">0</div>
+                <div class="stat-label" id="statLabel3">Années d'expertise</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" data-target="150">0</div>
-                <div class="stat-label">Partenaires</div>
+                <div class="stat-number" id="stat4" data-target="150">0</div>
+                <div class="stat-label" id="statLabel4">Partenaires</div>
             </div>
         </div>
     </div>
@@ -359,40 +669,33 @@
     <div class="contact-section" id="contact">
         <div class="contact-container">
             <div class="contact-info">
-                <div class="section-tag">Contactez-nous</div>
-                <h2 class="section-title">Parlons de <span class="highlight">votre projet</span></h2>
-                <p class="contact-description">Notre équipe est à votre écoute pour tous vos besoins d'impression. Remplissez le formulaire ou contactez-nous directement.</p>
+                <div class="section-tag" id="contactTag">Contactez-nous</div>
+                <h2 class="section-title">
+                    <span id="contactTitle">Parlons de</span> 
+                    <span class="highlight" id="contactTitleHighlight">votre projet</span>
+                </h2>
+                <p id="contactDescription">Notre équipe est à votre écoute pour tous vos besoins d'impression.</p>
                 
                 <div class="contact-details">
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div>
-                            <h4>Adresse</h4>
-                            <p>12 Rue de la Liberté, Centre Urbain Nord, Tunis, Tunisie</p>
+                            <h4 id="contactAddress">Adresse</h4>
+                            <p>12 Rue de la Liberté, Centre Urbain Nord, Tunis</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
                         <div>
-                            <h4>Téléphone</h4>
+                            <h4 id="contactPhone">Téléphone</h4>
                             <p>+216 71 123 456</p>
-                            <p>+216 98 765 432</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <div class="contact-icon"><i class="fas fa-envelope"></i></div>
                         <div>
-                            <h4>Email</h4>
+                            <h4 id="contactEmail">Email</h4>
                             <p>contact@darelfounoun.tn</p>
-                            <p>commercial@darelfounoun.tn</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-clock"></i></div>
-                        <div>
-                            <h4>Horaires</h4>
-                            <p>Lun-Ven: 8h30 - 18h00</p>
-                            <p>Sam: 9h00 - 13h00</p>
                         </div>
                     </div>
                 </div>
@@ -401,35 +704,25 @@
             <div class="contact-form">
                 <form id="contactForm">
                     <div class="form-group">
-                        <input type="text" id="name" required>
-                        <label>Nom complet</label>
+                        <input type="text" id="name" placeholder="Nom complet" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" required>
-                        <label>Email</label>
+                        <input type="email" id="email" placeholder="Email" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" id="phone">
-                        <label>Téléphone</label>
+                        <input type="tel" id="phone" placeholder="Téléphone">
                     </div>
                     <div class="form-group">
                         <select id="subject" required>
-                            <option value="">Sélectionnez un sujet</option>
                             <option value="devis">Demande de devis</option>
                             <option value="information">Demande d'information</option>
                             <option value="rdv">Prise de rendez-vous</option>
-                            <option value="autre">Autre</option>
                         </select>
-                        <label>Sujet</label>
                     </div>
                     <div class="form-group">
-                        <textarea id="message" rows="5" required></textarea>
-                        <label>Votre message</label>
+                        <textarea id="message" rows="5" placeholder="Votre message" required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">
-                        <span>Envoyer le message</span>
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Envoyer le message</button>
                     <div id="formMessage" class="form-message"></div>
                 </form>
             </div>
@@ -440,77 +733,282 @@
         <div class="footer-content">
             <div class="footer-info">
                 <div class="footer-section">
-                    <h4>Dar El Founoun</h4>
-                    <p>Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995. Qualité, créativité et excellence.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    </div>
+                    <h4 id="footerTitle">Dar El Founoun</h4>
+                    <p id="footerAbout">Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995.</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Liens rapides</h4>
+                    <h4 id="footerQuickLinks">Liens rapides</h4>
                     <ul>
-                        <li><a href="#accueil">Accueil</a></li>
-                        <li><a href="#produits">Nos produits</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#">Devis en ligne</a></li>
+                        <li><a href="#accueil" id="footerHome">Accueil</a></li>
+                        <li><a href="#produits" id="footerProducts">Nos produits</a></li>
+                        <li><a href="#contact" id="footerContact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Newsletter</h4>
-                    <p>Recevez nos offres spéciales</p>
+                    <h4 id="footerNewsletter">Newsletter</h4>
+                    <p id="footerNewsletterText">Recevez nos offres spéciales</p>
                     <div class="newsletter-form">
                         <input type="email" id="newsletterEmail" placeholder="Votre email">
-                        <button id="newsletterBtn"><i class="fas fa-paper-plane"></i></button>
+                        <button id="newsletterBtn" class="submit-btn" style="margin-top: 0.5rem;">S'abonner</button>
                     </div>
                     <div id="newsletterMessage" class="form-message"></div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Dar El Founoun - Tous droits réservés | Design créatif par l'équipe Dar El Founoun</p>
+                <p id="footerCopyright">© 2024 Dar El Founoun - Tous droits réservés</p>
             </div>
         </div>
     </footer>
 
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
     <script>
+        // ==================== TRADUCTIONS ====================
+        const translations = {
+            fr: {
+                logo: "Dar El <span>Founoun</span>",
+                nav_home: "Accueil",
+                nav_products: "Produits",
+                nav_contact: "Contact",
+                hero_badge: "✨ Excellence depuis 1995",
+                hero_title: "Dar El",
+                hero_title_gradient: "Founoun",
+                hero_subtitle: "L'élégance de l'impression, la beauté de l'art",
+                hero_description: "Découvrez notre collection exclusive de produits d'impression haut de gamme",
+                hero_btn_products: "Découvrir nos produits",
+                hero_btn_contact: "Nous contacter",
+                products_tag: "Notre Catalogue",
+                products_title: "Nos Produits",
+                products_title_highlight: "d'Exception",
+                products_subtitle: "Des créations uniques pour tous vos besoins d'impression",
+                filter_all: "Tous",
+                filter_stationery: "Papeterie",
+                filter_advertising: "Publicitaire",
+                filter_luxury: "Luxe",
+                filter_art: "Art & Design",
+                stats_clients: "Clients satisfaits",
+                stats_projects: "Projets réalisés",
+                stats_years: "Années d'expertise",
+                stats_partners: "Partenaires",
+                contact_tag: "Contactez-nous",
+                contact_title: "Parlons de",
+                contact_title_highlight: "votre projet",
+                contact_description: "Notre équipe est à votre écoute pour tous vos besoins d'impression.",
+                contact_address: "Adresse",
+                contact_phone: "Téléphone",
+                contact_email: "Email",
+                contact_form_name: "Nom complet",
+                contact_form_email: "Email",
+                contact_form_phone: "Téléphone",
+                contact_form_subject: "Sujet",
+                contact_form_message: "Votre message",
+                contact_form_submit: "Envoyer le message",
+                contact_form_quote: "Demande de devis",
+                contact_form_info: "Demande d'information",
+                contact_form_appointment: "Prise de rendez-vous",
+                footer_title: "Dar El Founoun",
+                footer_about: "Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995.",
+                footer_quick_links: "Liens rapides",
+                footer_newsletter: "Newsletter",
+                footer_newsletter_text: "Recevez nos offres spéciales",
+                footer_newsletter_placeholder: "Votre email",
+                footer_copyright: "© 2024 Dar El Founoun - Tous droits réservés",
+                product_details: "En savoir plus"
+            },
+            ar: {
+                logo: "دار <span>الفنون</span>",
+                nav_home: "الرئيسية",
+                nav_products: "المنتجات",
+                nav_contact: "اتصل بنا",
+                hero_badge: "✨ التميز منذ 1995",
+                hero_title: "دار",
+                hero_title_gradient: "الفنون",
+                hero_subtitle: "أناقة الطباعة، جمال الفن",
+                hero_description: "اكتشف مجموعتنا الحصرية من منتجات الطباعة الفاخرة",
+                hero_btn_products: "اكتشف منتجاتنا",
+                hero_btn_contact: "اتصل بنا",
+                products_tag: "كتالوجنا",
+                products_title: "منتجاتنا",
+                products_title_highlight: "الاستثنائية",
+                products_subtitle: "إبداعات فريدة لجميع احتياجات الطباعة الخاصة بك",
+                filter_all: "الكل",
+                filter_stationery: "القرطاسية",
+                filter_advertising: "الإعلانات",
+                filter_luxury: "الفخامة",
+                filter_art: "الفن والتصميم",
+                stats_clients: "عملاء راضون",
+                stats_projects: "مشاريع منجزة",
+                stats_years: "سنوات من الخبرة",
+                stats_partners: "شركاء",
+                contact_tag: "اتصل بنا",
+                contact_title: "تحدث عن",
+                contact_title_highlight: "مشروعك",
+                contact_description: "فريقنا في انتظاركم لتلبية جميع احتياجات الطباعة الخاصة بكم.",
+                contact_address: "العنوان",
+                contact_phone: "الهاتف",
+                contact_email: "البريد الإلكتروني",
+                contact_form_name: "الاسم الكامل",
+                contact_form_email: "البريد الإلكتروني",
+                contact_form_phone: "الهاتف",
+                contact_form_subject: "الموضوع",
+                contact_form_message: "رسالتك",
+                contact_form_submit: "إرسال الرسالة",
+                contact_form_quote: "طلب عرض سعر",
+                contact_form_info: "طلب معلومات",
+                contact_form_appointment: "تحديد موعد",
+                footer_title: "دار الفنون",
+                footer_about: "شريككم المفضل لجميع احتياجات الطباعة منذ 1995.",
+                footer_quick_links: "روابط سريعة",
+                footer_newsletter: "النشرة البريدية",
+                footer_newsletter_text: "احصل على عروضنا الخاصة",
+                footer_newsletter_placeholder: "بريدك الإلكتروني",
+                footer_copyright: "© 2024 دار الفنون - جميع الحقوق محفوظة",
+                product_details: "اعرف المزيد"
+            },
+            en: {
+                logo: "Dar El <span>Founoun</span>",
+                nav_home: "Home",
+                nav_products: "Products",
+                nav_contact: "Contact",
+                hero_badge: "✨ Excellence since 1995",
+                hero_title: "Dar El",
+                hero_title_gradient: "Founoun",
+                hero_subtitle: "The elegance of printing, the beauty of art",
+                hero_description: "Discover our exclusive collection of premium printing products",
+                hero_btn_products: "Discover our products",
+                hero_btn_contact: "Contact us",
+                products_tag: "Our Catalog",
+                products_title: "Our",
+                products_title_highlight: "Exceptional Products",
+                products_subtitle: "Unique creations for all your printing needs",
+                filter_all: "All",
+                filter_stationery: "Stationery",
+                filter_advertising: "Advertising",
+                filter_luxury: "Luxury",
+                filter_art: "Art & Design",
+                stats_clients: "Happy Clients",
+                stats_projects: "Projects Completed",
+                stats_years: "Years of Expertise",
+                stats_partners: "Partners",
+                contact_tag: "Contact Us",
+                contact_title: "Let's Talk About",
+                contact_title_highlight: "Your Project",
+                contact_description: "Our team is here for all your printing needs.",
+                contact_address: "Address",
+                contact_phone: "Phone",
+                contact_email: "Email",
+                contact_form_name: "Full Name",
+                contact_form_email: "Email",
+                contact_form_phone: "Phone",
+                contact_form_subject: "Subject",
+                contact_form_message: "Your Message",
+                contact_form_submit: "Send Message",
+                contact_form_quote: "Quote Request",
+                contact_form_info: "Information Request",
+                contact_form_appointment: "Appointment",
+                footer_title: "Dar El Founoun",
+                footer_about: "Your trusted partner for all your printing needs since 1995.",
+                footer_quick_links: "Quick Links",
+                footer_newsletter: "Newsletter",
+                footer_newsletter_text: "Receive our special offers",
+                footer_newsletter_placeholder: "Your email",
+                footer_copyright: "© 2024 Dar El Founoun - All rights reserved",
+                product_details: "Learn more"
+            }
+        };
+
         // ==================== PRODUITS ====================
         const products = [
-            { id: 1, name: "Cartes de Visite Premium", desc: "Papier luxe 350g, finition mate ou brillante", price: "Dès 50 DT", category: "papeterie", icon: "fa-id-card", details: "Impression recto-verso, vernis sélectif disponible. Personnalisation complète avec votre logo." },
-            { id: 2, name: "Enveloppes Personnalisées", desc: "Papier recyclé ou luxe, fenêtre ou non", price: "Dès 40 DT/100", category: "papeterie", icon: "fa-envelope", details: "Personnalisation avec votre logo. Plusieurs formats et papiers au choix." },
-            { id: 3, name: "Blocs Notes", desc: "Papier recyclé, couverture cartonnée", price: "Dès 15 DT", category: "papeterie", icon: "fa-book", details: "Idéal pour vos prises de notes. Personnalisation du logo disponible." },
-            { id: 4, name: "Papier à En-tête", desc: "Papier 80g, filigrane disponible", price: "Dès 30 DT/500", category: "papeterie", icon: "fa-file-alt", details: "Papier professionnel avec en-tête personnalisé." },
-            { id: 5, name: "Carnets Moleskine", desc: "Carnets luxe, couverture rigide", price: "Dès 25 DT", category: "papeterie", icon: "fa-notebook", details: "Carnets haut de gamme, élastique de fermeture." },
-            { id: 6, name: "Chemises Cartonnées", desc: "Carton 350g, rabats personnalisés", price: "Dès 45 DT/100", category: "papeterie", icon: "fa-folder", details: "Parfait pour vos dossiers professionnels." },
-            { id: 7, name: "Pochette Présentation", desc: "Plastique ou carton, fenêtre", price: "Dès 35 DT/50", category: "papeterie", icon: "fa-folder-open", details: "Idéal pour la présentation de vos documents." },
-            { id: 8, name: "Stickers Personnalisés", desc: "Vinyle ou papier, découpe sur mesure", price: "Dès 20 DT/50", category: "papeterie", icon: "fa-tag", details: "Stickers pour tous usages. Résistants à l'eau." },
-            { id: 9, name: "Flyers Publicitaires", desc: "Format A5, papier couché 135g", price: "Dès 80 DT/1000", category: "publicitaire", icon: "fa-file-pdf", details: "Idéal pour vos campagnes marketing." },
-            { id: 10, name: "Roll-up Professionnel", desc: "Stand d'exposition, sacoche incluse", price: "Dès 120 DT", category: "publicitaire", icon: "fa-chart-line", details: "Idéal pour salons et événements." },
-            { id: 11, name: "Bâches Publicitaires", desc: "Grand format, œillets renforcés", price: "Dès 25 DT/m²", category: "publicitaire", icon: "fa-flag", details: "Résistantes aux intempéries." },
-            { id: 12, name: "Panneaux LED", desc: "Éclairage intégré, sur-mesure", price: "Sur devis", category: "publicitaire", icon: "fa-lightbulb", details: "Panneaux lumineux pour une visibilité maximale." },
-            { id: 13, name: "Calendriers Publicitaires", desc: "Mur ou bureau, personnalisation", price: "Dès 45 DT/50", category: "publicitaire", icon: "fa-calendar-alt", details: "Calendriers personnalisés avec votre logo." },
-            { id: 14, name: "Goodies Personnalisés", desc: "Mugs, stylos, porte-clés", price: "Dès 5 DT", category: "publicitaire", icon: "fa-gift", details: "Large choix d'articles publicitaires." },
-            { id: 15, name: "Catalogue de Luxe", desc: "Reliure cousue, papier texturé", price: "Sur devis", category: "luxe", icon: "fa-book-open", details: "Finition haut de gamme pour vos collections." },
-            { id: 16, name: "Faire-part Mariage", desc: "Découpe laser, ruban satin", price: "Dès 3 DT/pièce", category: "luxe", icon: "fa-heart", details: "Personnalisation complète. Papier texturé." },
-            { id: 17, name: "Albums Photo Premium", desc: "Couverture cuir, dorure", price: "Dès 85 DT", category: "luxe", icon: "fa-camera", details: "Albums haut de gamme pour vos souvenirs." },
-            { id: 18, name: "Diplômes Certificats", desc: "Papier parchemin, sceau", price: "Dès 15 DT", category: "luxe", icon: "fa-scroll", details: "Diplômes personnalisés avec cachet officiel." },
-            { id: 19, name: "Emballages Luxe", desc: "Boîtes sur-mesure, rubans", price: "Dès 8 DT", category: "luxe", icon: "fa-box", details: "Emballages premium pour vos produits." },
-            { id: 20, name: "Affiches Artistiques", desc: "Grand format, impression UV", price: "Dès 35 DT", category: "art", icon: "fa-palette", details: "Impression sur support rigide ou souple." },
-            { id: 21, name: "Toiles d'Art", desc: "Impression sur toile, châssis bois", price: "Dès 65 DT", category: "art", icon: "fa-paintbrush", details: "Reproductions d'œuvres d'art." },
-            { id: 22, name: "Posters d'Art", desc: "Papier d'art 250g, finition mate", price: "Dès 25 DT", category: "art", icon: "fa-image", details: "Posters haute qualité pour la décoration." },
-            { id: 23, name: "Portfolios Artistes", desc: "Reliure spirale, pochettes", price: "Dès 55 DT", category: "art", icon: "fa-folder-open", details: "Idéal pour les artistes et photographes." },
-            { id: 24, name: "Livres d'Art", desc: "Impression fine art, reliure luxe", price: "Sur devis", category: "art", icon: "fa-book", details: "Livres d'art haut de gamme." }
+            { id: 1, name: "Cartes de Visite Premium", desc: "Papier luxe 350g, finition mate ou brillante", price: "Dès 50 DT", category: "papeterie", icon: "fa-id-card", details: "Impression recto-verso, vernis sélectif disponible." },
+            { id: 2, name: "Flyers Publicitaires", desc: "Format A5, papier couché 135g", price: "Dès 80 DT/1000", category: "publicitaire", icon: "fa-file-pdf", details: "Idéal pour vos campagnes marketing." },
+            { id: 3, name: "Roll-up Professionnel", desc: "Stand d'exposition, sacoche incluse", price: "Dès 120 DT", category: "publicitaire", icon: "fa-chart-line", details: "Idéal pour salons et événements." },
+            { id: 4, name: "Toiles d'Art", desc: "Impression sur toile, châssis bois", price: "Dès 65 DT", category: "art", icon: "fa-paintbrush", details: "Reproductions d'œuvres d'art." },
+            { id: 5, name: "Faire-part Mariage", desc: "Découpe laser, ruban satin", price: "Dès 3 DT/pièce", category: "luxe", icon: "fa-heart", details: "Personnalisation complète." },
+            { id: 6, name: "Catalogue de Luxe", desc: "Reliure cousue, papier texturé", price: "Sur devis", category: "luxe", icon: "fa-book-open", details: "Finition haut de gamme." }
         ];
 
         let currentCategory = 'all';
+        let currentLang = 'fr';
 
+        // Fonction pour appliquer les traductions
+        function applyTranslations() {
+            const t = translations[currentLang];
+            
+            // Mettre à jour tous les éléments avec ID
+            document.getElementById('logo').innerHTML = t.logo;
+            document.getElementById('navHome').textContent = t.nav_home;
+            document.getElementById('navProducts').textContent = t.nav_products;
+            document.getElementById('navContact').textContent = t.nav_contact;
+            document.getElementById('heroBadge').textContent = t.hero_badge;
+            document.getElementById('heroTitle').textContent = t.hero_title;
+            document.getElementById('heroTitleGradient').textContent = t.hero_title_gradient;
+            document.getElementById('heroSubtitle').textContent = t.hero_subtitle;
+            document.getElementById('heroDescription').textContent = t.hero_description;
+            document.getElementById('heroBtnProducts').innerHTML = t.hero_btn_products + ' <i class="fas fa-arrow-right"></i>';
+            document.getElementById('heroBtnContact').textContent = t.hero_btn_contact;
+            document.getElementById('productsTag').textContent = t.products_tag;
+            document.getElementById('productsTitle').textContent = t.products_title;
+            document.getElementById('productsTitleHighlight').textContent = t.products_title_highlight;
+            document.getElementById('productsSubtitle').textContent = t.products_subtitle;
+            document.getElementById('filterAll').innerHTML = '<i class="fas fa-th-large"></i> ' + t.filter_all + ' (24)';
+            document.getElementById('filterStationery').innerHTML = '<i class="fas fa-envelope"></i> ' + t.filter_stationery + ' (8)';
+            document.getElementById('filterAdvertising').innerHTML = '<i class="fas fa-chart-line"></i> ' + t.filter_advertising + ' (6)';
+            document.getElementById('filterLuxury').innerHTML = '<i class="fas fa-gem"></i> ' + t.filter_luxury + ' (5)';
+            document.getElementById('filterArt').innerHTML = '<i class="fas fa-palette"></i> ' + t.filter_art + ' (5)';
+            document.getElementById('statLabel1').textContent = t.stats_clients;
+            document.getElementById('statLabel2').textContent = t.stats_projects;
+            document.getElementById('statLabel3').textContent = t.stats_years;
+            document.getElementById('statLabel4').textContent = t.stats_partners;
+            document.getElementById('contactTag').textContent = t.contact_tag;
+            document.getElementById('contactTitle').textContent = t.contact_title;
+            document.getElementById('contactTitleHighlight').textContent = t.contact_title_highlight;
+            document.getElementById('contactDescription').textContent = t.contact_description;
+            document.getElementById('contactAddress').textContent = t.contact_address;
+            document.getElementById('contactPhone').textContent = t.contact_phone;
+            document.getElementById('contactEmail').textContent = t.contact_email;
+            document.getElementById('submitBtn').innerHTML = t.contact_form_submit + ' <i class="fas fa-paper-plane"></i>';
+            document.getElementById('footerTitle').textContent = t.footer_title;
+            document.getElementById('footerAbout').textContent = t.footer_about;
+            document.getElementById('footerQuickLinks').textContent = t.footer_quick_links;
+            document.getElementById('footerHome').textContent = t.nav_home;
+            document.getElementById('footerProducts').textContent = t.nav_products;
+            document.getElementById('footerContact').textContent = t.nav_contact;
+            document.getElementById('footerNewsletter').textContent = t.footer_newsletter;
+            document.getElementById('footerNewsletterText').textContent = t.footer_newsletter_text;
+            document.getElementById('footerCopyright').textContent = t.footer_copyright;
+            
+            // Placeholders
+            document.querySelector('#name').placeholder = t.contact_form_name;
+            document.querySelector('#email').placeholder = t.contact_form_email;
+            document.querySelector('#phone').placeholder = t.contact_form_phone;
+            document.querySelector('#message').placeholder = t.contact_form_message;
+            document.querySelector('#newsletterEmail').placeholder = t.footer_newsletter_placeholder;
+            
+            // Options du select
+            const subjectSelect = document.querySelector('#subject');
+            subjectSelect.options[0].text = t.contact_form_quote;
+            subjectSelect.options[1].text = t.contact_form_info;
+            subjectSelect.options[2].text = t.contact_form_appointment;
+            
+            // Re-rendre les produits
+            renderProducts();
+        }
+
+        // Rendu des produits
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             if (!grid) return;
+            
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+            const t = translations[currentLang];
+            
             grid.innerHTML = filtered.map(p => `
-                <div class="product-card" data-id="${p.id}">
+                <div class="product-card" onclick="showProductDetails(${p.id})">
                     <div class="product-image">
                         <div class="product-icon"><i class="fas ${p.icon}"></i></div>
                     </div>
@@ -518,261 +1016,177 @@
                         <h3 class="product-title">${p.name}</h3>
                         <p class="product-desc">${p.desc}</p>
                         <div class="product-price">${p.price}</div>
-                        <button class="product-btn" onclick="showProductDetails(${p.id})">En savoir plus <i class="fas fa-arrow-right"></i></button>
+                        <button class="product-btn">${t.product_details} <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
+        // Détails du produit
         function showProductDetails(id) {
             const p = products.find(p => p.id === id);
             const modal = document.getElementById('productModal');
+            const t = translations[currentLang];
+            const closeText = currentLang === 'ar' ? 'إغلاق' : (currentLang === 'en' ? 'Close' : 'Fermer');
+            
             document.getElementById('modalContent').innerHTML = `
-                <div class="modal-image"><i class="fas ${p.icon}"></i></div>
-                <h2 class="modal-title">${p.name}</h2>
-                <div class="modal-badge">${p.category === 'papeterie' ? 'Papeterie' : p.category === 'publicitaire' ? 'Publicitaire' : p.category === 'luxe' ? 'Luxe' : 'Art & Design'}</div>
-                <p class="modal-desc">${p.desc}</p>
-                <div class="modal-price">${p.price}</div>
-                <p class="modal-details">${p.details}</p>
-                <button class="modal-close-btn" onclick="closeModal()">Fermer</button>
+                <div class="modal-image" style="text-align:center; font-size:4rem; color:#e67e22;"><i class="fas ${p.icon}"></i></div>
+                <h2 style="text-align:center;">${p.name}</h2>
+                <p style="color:#64748b; margin:1rem 0;">${p.desc}</p>
+                <div style="font-size:1.5rem; font-weight:700; color:#e67e22; text-align:center;">${p.price}</div>
+                <p style="margin:1rem 0;">${p.details}</p>
+                <button class="modal-close-btn" onclick="closeModal()">${closeText}</button>
             `;
             modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('productModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
         }
 
-        // ==================== FORMULAIRES AVEC BASE DE DONNÉES ====================
-        
-        // Formulaire de contact
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm) {
-            contactForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-                
-                // Validation
-                if (!name || !email || !message) {
-                    showMessage('formMessage', '❌ Veuillez remplir tous les champs obligatoires', 'error');
-                    return;
+        // Changer la langue
+        function setLanguage(lang) {
+            if (!translations[lang]) return;
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            // Mettre à jour les boutons actifs
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
                 }
-                
-                if (!email.includes('@') || !email.includes('.')) {
-                    showMessage('formMessage', '❌ Veuillez entrer un email valide', 'error');
-                    return;
-                }
-                
-                const submitBtn = document.querySelector('.submit-btn');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
-                submitBtn.disabled = true;
-                
-                try {
-                    const response = await fetch('save_contact.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, email, phone, subject, message })
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        showMessage('formMessage', result.message, 'success');
-                        contactForm.reset();
-                    } else {
-                        showMessage('formMessage', result.message, 'error');
-                    }
-                } catch (error) {
-                    console.error('Erreur:', error);
-                    showMessage('formMessage', '❌ Erreur de connexion au serveur. Vérifiez que Apache est démarré.', 'error');
-                }
-                
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
-        }
-        
-        // Newsletter
-        const newsletterBtn = document.getElementById('newsletterBtn');
-        if (newsletterBtn) {
-            newsletterBtn.addEventListener('click', async () => {
-                const email = document.getElementById('newsletterEmail').value;
-                
-                if (!email) {
-                    showMessage('newsletterMessage', '❌ Veuillez entrer votre email', 'error');
-                    return;
-                }
-                
-                if (!email.includes('@') || !email.includes('.')) {
-                    showMessage('newsletterMessage', '❌ Veuillez entrer un email valide', 'error');
-                    return;
-                }
-                
-                const originalText = newsletterBtn.innerHTML;
-                newsletterBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                newsletterBtn.disabled = true;
-                
-                try {
-                    const response = await fetch('save_newsletter.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email })
-                    });
-                    
-                    const result = await response.json();
-                    showMessage('newsletterMessage', result.message, result.success ? 'success' : 'error');
-                    
-                    if (result.success) {
-                        document.getElementById('newsletterEmail').value = '';
-                    }
-                } catch (error) {
-                    console.error('Erreur:', error);
-                    showMessage('newsletterMessage', '❌ Erreur de connexion au serveur. Vérifiez que Apache est démarré.', 'error');
-                }
-                
-                newsletterBtn.innerHTML = originalText;
-                newsletterBtn.disabled = false;
-            });
-        }
-        
-        function showMessage(elementId, message, type) {
-            const el = document.getElementById(elementId);
-            if (el) {
-                el.textContent = message;
-                el.className = `form-message ${type}`;
-                setTimeout(() => {
-                    el.className = 'form-message';
-                    el.textContent = '';
-                }, 5000);
-            }
-        }
-
-        // ==================== ANIMATIONS ====================
-        function animateStats() {
-            document.querySelectorAll('.stat-number').forEach(stat => {
-                const target = parseInt(stat.dataset.target);
-                let current = 0;
-                const increment = target / 50;
-                const update = () => {
-                    if (current < target) {
-                        current += increment;
-                        stat.textContent = Math.ceil(current);
-                        requestAnimationFrame(update);
-                    } else {
-                        stat.textContent = target.toLocaleString();
-                    }
-                };
-                update();
-            });
-        }
-
-        const statsObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) animateStats();
-        }, { threshold: 0.5 });
-        
-        const statsSection = document.querySelector('.stats-section');
-        if (statsSection) statsObserver.observe(statsSection);
-
-        // Curseur personnalisé
-        const cursor = document.querySelector('.cursor');
-        const follower = document.querySelector('.cursor-follower');
-        
-        if (cursor && follower) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                follower.style.left = e.clientX + 'px';
-                follower.style.top = e.clientY + 'px';
             });
             
-            document.querySelectorAll('a, button, .product-card, .filter-btn').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    follower.style.width = '60px';
-                    follower.style.height = '60px';
-                });
-                el.addEventListener('mouseleave', () => {
-                    follower.style.width = '40px';
-                    follower.style.height = '40px';
-                });
-            });
+            // Direction pour l'arabe
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+            }
+            
+            applyTranslations();
         }
 
-        // Filtres
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentCategory = btn.dataset.category;
-                renderProducts();
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Charger la langue sauvegardée
+            const savedLang = localStorage.getItem('language') || 'fr';
+            setLanguage(savedLang);
+            
+            // Événements des boutons de langue
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setLanguage(btn.dataset.lang);
+                });
             });
-        });
-
-        // Menu mobile
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                menuToggle.classList.toggle('active');
-                navLinks.classList.toggle('active');
+            
+            // Filtres
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                    renderProducts();
+                });
             });
-        }
-
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (header) {
-                if (window.scrollY > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
+            
+            // Menu mobile
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    menuToggle.classList.toggle('active');
+                    if (navLinks.style.display === 'flex') {
+                        navLinks.style.display = 'none';
+                    } else {
+                        navLinks.style.display = 'flex';
+                        navLinks.style.flexDirection = 'column';
+                        navLinks.style.position = 'absolute';
+                        navLinks.style.top = '60px';
+                        navLinks.style.left = '0';
+                        navLinks.style.width = '100%';
+                        navLinks.style.background = '#1a2a3a';
+                        navLinks.style.padding = '1rem';
+                    }
+                });
+            }
+            
+            // Animation des statistiques
+            function animateStats() {
+                document.querySelectorAll('.stat-number').forEach(stat => {
+                    const target = parseInt(stat.dataset.target);
+                    let current = 0;
+                    const increment = target / 50;
+                    const update = () => {
+                        if (current < target) {
+                            current += increment;
+                            stat.textContent = Math.ceil(current);
+                            requestAnimationFrame(update);
+                        } else {
+                            stat.textContent = target.toLocaleString();
+                        }
+                    };
+                    update();
+                });
+            }
+            
+            const statsObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) animateStats();
+            }, { threshold: 0.5 });
+            
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) statsObserver.observe(statsSection);
+            
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Fermer modal au clic sur X
+            document.querySelector('.close-modal').addEventListener('click', closeModal);
+            window.onclick = (e) => {
+                const modal = document.getElementById('productModal');
+                if (e.target === modal) closeModal();
+            };
+            
+            // Formulaire de contact
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const message = document.getElementById('message').value;
+                    
+                    if (!name || !email || !message) {
+                        showMessage('formMessage', 'Veuillez remplir tous les champs', 'error');
+                        return;
+                    }
+                    
+                    showMessage('formMessage', 'Message envoyé avec succès !', 'success');
+                    contactForm.reset();
+                });
+            }
+            
+            function showMessage(elementId, message, type) {
+                const el = document.getElementById(elementId);
+                if (el) {
+                    el.textContent = message;
+                    el.className = `form-message ${type}`;
+                    setTimeout(() => {
+                        el.className = 'form-message';
+                        el.textContent = '';
+                    }, 3000);
                 }
             }
         });
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Modal close
-        window.onclick = (e) => {
-            const modal = document.getElementById('productModal');
-            if (e.target === modal) closeModal();
-        };
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        // Animation au scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        document.querySelectorAll('.product-card, .stat-item, .footer-section, .contact-item').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Initialisation
-        renderProducts();
     </script>
     <script src="ai-assistant.js"></script>
 </body>
