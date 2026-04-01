@@ -12,6 +12,24 @@
             padding: 0;
             box-sizing: border-box;
         }
+        .stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+.stat h2 {
+  font-size: 40px;
+  color: gold;
+}
+
+.stat p {
+  font-size: 18px;
+  margin-top: 10px;
+}
 
         body {
             font-family: 'Inter', sans-serif;
@@ -623,7 +641,22 @@
             </div>
         </div>
     </section>
+<section class="stats">
+  <div class="stat">
+    <h2 class="counter" data-target="1200">0</h2>
+    <p>Visiteurs</p>
+  </div>
 
+  <div class="stat">
+    <h2 class="counter" data-target="85">0</h2>
+    <p>Œuvres</p>
+  </div>
+
+  <div class="stat">
+    <h2 class="counter" data-target="15">0</h2>
+    <p>Artistes</p>
+  </div>
+</section>
     <div class="container" id="produits">
         <div class="section-header">
             <div class="section-tag" id="productsTag">Notre Catalogue</div>
@@ -1189,5 +1222,6 @@
         });
     </script>
     <script src="ai-assistant.js"></script>
+    <script src="stat.jsgi"></script>
 </body>
 </html>
