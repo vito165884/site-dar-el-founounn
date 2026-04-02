@@ -977,3 +977,192 @@ html[dir="rtl"] .ai-message.bot .ai-message-content {
         margin-right: auto;
     }
 }
+/* Bouton dashboard */
+.dashboard-btn {
+    padding: 0.4rem 1rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.dashboard-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+/* Dashboard overlay */
+.dashboard-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-container {
+    background: white;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 450px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-header {
+    background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+    color: white;
+    padding: 1.2rem;
+    border-radius: 24px 24px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.close-dashboard {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.dashboard-body {
+    padding: 1.2rem;
+}
+
+/* Stats cards */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.stat-card i {
+    font-size: 1.8rem;
+    color: #e67e22;
+    margin-bottom: 0.3rem;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+/* Section produits populaires */
+.popular-products {
+    margin-bottom: 1.5rem;
+}
+
+.popular-products h4 {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.product-name {
+    font-weight: 500;
+}
+
+.product-views {
+    font-size: 0.8rem;
+    color: #e67e22;
+}
+
+/* Liens rapides */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    background: #f8fafc;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.2s;
+    text-decoration: none;
+    color: #1e293b;
+}
+
+.action-btn:hover {
+    background: #e67e22;
+    color: white;
+}
+
+/* Infos contact */
+.contact-info {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 16px;
+    margin-top: 0.5rem;
+}
+
+.contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact-info i {
+    width: 25px;
+    color: #e67e22;
+}
+</style>
