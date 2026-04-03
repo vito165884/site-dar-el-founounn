@@ -1,10 +1,17 @@
 <?php
-// save_contact.php - Version complète avec votre endpoint
+// save_contact.php - Version sans colonne formspree_sent
 require_once 'config.php';
 
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
 
-// VOTRE ENDPOINT FORMPREE
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
+
+// Configuration Formspree
 $FORMSPREE_ENDPOINT = 'https://formspree.io/f/xaqlpewe';
 
 // Récupération des données
@@ -25,7 +32,11 @@ if (!empty($errors)) {
     exit;
 }
 
-// ========== ENVOI VERS FORMSPREE ==========
+$formspreeSent = false;
+$dbSaved = false;
+$messages = [];
+
+// ========== 1. ENVOI VERS FORMSPREE ==========
 $ch = curl_init($FORMSPREE_ENDPOINT);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
@@ -41,31 +52,61 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
 
-$response = curl_exec($ch);
+$formspreeResponse = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$curlError = curl_error($ch);
 curl_close($ch);
 
-// ========== SAUVEGARDE DANS MySQL ==========
-$dbSuccess = false;
-$pdo = getDBConnection();
-if ($pdo) {
-    try {
-        $stmt = $pdo->prepare("
-            INSERT INTO contacts (name, email, phone, subject, message, ip_address, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, NOW())
-        ");
-        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-        $dbSuccess = $stmt->execute([$name, $email, $phone, $subject, $message, $ip]);
-    } catch (PDOException $e) {
-        error_log("Erreur MySQL: " . $e->getMessage());
-    }
+if ($httpCode === 200) {
+    $formspreeSent = true;
+    $messages[] = '✅ Email envoyé via Formspree';
+} else {
+    $messages[] = '⚠️ Envoi email échoué (message sauvegardé en base)';
 }
 
-// ========== RÉPONSE ==========
-if ($httpCode === 200 || $dbSuccess) {
-    echo json_encode(['success' => true, 'message' => '✅ Message envoyé avec succès !']);
+// ========== 2. SAUVEGARDE DANS LA BASE DE DONNÉES ==========
+$pdo = getDBConnection();
+
+if ($pdo) {
+    try {
+        // Vérifier si la colonne formspree_sent existe
+        $columns = $pdo->query("SHOW COLUMNS FROM contacts")->fetchAll(PDO::FETCH_COLUMN);
+        
+        if (in_array('formspree_sent', $columns)) {
+            // Version avec formspree_sent
+            $stmt = $pdo->prepare("
+                INSERT INTO contacts (name, email, phone, subject, message, ip_address, formspree_sent) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ");
+            $ip = getClientIP();
+            $result = $stmt->execute([$name, $email, $phone, $subject, $message, $ip, $formspreeSent ? 1 : 0]);
+        } else {
+            // Version sans formspree_sent
+            $stmt = $pdo->prepare("
+                INSERT INTO contacts (name, email, phone, subject, message, ip_address) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            $ip = getClientIP();
+            $result = $stmt->execute([$name, $email, $phone, $subject, $message, $ip]);
+        }
+        
+        if ($result) {
+            $dbSaved = true;
+            $messages[] = '✅ Données enregistrées en base';
+        } else {
+            $messages[] = '❌ Erreur enregistrement base';
+        }
+        
+    } catch (PDOException $e) {
+        $messages[] = '❌ Erreur DB: ' . $e->getMessage();
+        error_log("Erreur MySQL: " . $e->getMessage());
+    }
 } else {
-    echo json_encode(['success' => false, 'message' => '❌ Erreur lors de l\'envoi']);
+    $messages[] = '❌ Connexion base impossible';
 }
+
+$success = ($formspreeSent || $dbSaved);
+echo json_encode([
+    'success' => $success,
+    'message' => implode(' | ', $messages)
+]);
 ?>

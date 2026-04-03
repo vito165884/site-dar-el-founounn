@@ -1,5 +1,5 @@
 <?php
-// Configuration de la base de données
+// config.php - Configuration de la base de données
 $host = 'localhost';
 $dbname = 'dar_elfounoun';
 $username = 'root';
@@ -14,19 +14,32 @@ function getDBConnection() {
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         return $pdo;
     } catch(PDOException $e) {
-        error_log("Erreur connexion DB: " . $e->getMessage());
-        return null;
+        // Si la base n'existe pas, on la crée
+        try {
+            $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $pdo->exec("USE `$dbname`");
+            return $pdo;
+        } catch(PDOException $e2) {
+            error_log("Erreur connexion DB: " . $e2->getMessage());
+            return null;
+        }
     }
 }
 
 // Fonction pour envoyer des réponses JSON
-function sendJSONResponse($success, $message) {
+function sendJSONResponse($success, $message, $data = null) {
     header('Content-Type: application/json');
-    echo json_encode(['success' => $success, 'message' => $message]);
+    $response = ['success' => $success, 'message' => $message];
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    echo json_encode($response);
     exit;
 }
 
-// Fonction pour obtenir l'adresse IP du client
+// Fonction pour obtenir l'adresse IP
 function getClientIP() {
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         return $_SERVER['HTTP_CLIENT_IP'];
@@ -35,15 +48,5 @@ function getClientIP() {
     } else {
         return $_SERVER['REMOTE_ADDR'];
     }
-}
-
-// Test de connexion (optionnel, peut être retiré)
-try {
-    $testConnection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    $testConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // Connexion réussie, ne rien afficher pour ne pas polluer les réponses API
-} catch(PDOException $e) {
-    // En développement, vous pouvez décommenter pour voir l'erreur
-    // echo "Erreur de connexion à la base de données: " . $e->getMessage();
 }
 ?>

@@ -545,49 +545,87 @@ document.documentElement.setAttribute('dir', 'ltr');
 }
 applyTranslations();
 }
+// ========== FORMULAIRE DE CONTACT ==========
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Récupérer les données du formulaire
-        const nom = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const telephone = document.getElementById('phone').value;
-        const sujet = document.getElementById('subject').value;
-        const message = document.getElementById('message').value;
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        submitBtn.disabled = true;
         
-        // Construire le message pour email
-        const contenuMessage = `Nom: ${nom}%0AEmail: ${email}%0ATéléphone: ${telephone}%0ASujet: ${sujet}%0AMessage: ${message}`;
+        const formData = new FormData(contactForm);
         
-        // Envoyer vers FormSubmit
         try {
-            const response = await fetch('https://formsubmit.co/ajax/fareshamza167@gmail.com', {
+            const response = await fetch('save_contact.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    nom: nom,
-                    email: email,
-                    telephone: telephone,
-                    sujet: sujet,
-                    message: message,
-                    _subject: `Nouveau message Dar El Founoun - ${sujet}`,
-                    _captcha: 'false'
-                })
+                body: formData
             });
             
-            if (response.ok) {
-                showMessage('formMessage', '✅ Message envoyé avec succès ! Nous vous répondrons rapidement.', 'success');
+            const result = await response.json();
+            
+            if (result.success) {
+                showMessage('formMessage', '✅ ' + result.message, 'success');
                 contactForm.reset();
             } else {
-                showMessage('formMessage', '❌ Erreur lors de l\'envoi. Veuillez réessayer.', 'error');
+                showMessage('formMessage', '❌ ' + result.message, 'error');
             }
         } catch (error) {
             console.error('Erreur:', error);
             showMessage('formMessage', '❌ Erreur de connexion au serveur. Veuillez réessayer.', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+// ========== NEWSLETTER ==========
+const newsletterForm = document.getElementById('newsletterForm');
+if (newsletterForm) {
+    newsletterForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('newsletterEmail').value;
+        const submitBtn = newsletterForm.querySelector('button');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+        
+        const formData = new FormData();
+        formData.append('email', email);
+        
+        try {
+            const response = await fetch('save_newsletter.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showMessage('newsletterMessage', '✅ ' + result.message, 'success');
+                document.getElementById('newsletterEmail').value = '';
+            } else {
+                showMessage('newsletterMessage', '❌ ' + result.message, 'error');
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            showMessage('newsletterMessage', '❌ Erreur de connexion au serveur. Veuillez réessayer.', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            // Cacher le message après 5 secondes
+            setTimeout(() => {
+                const msgDiv = document.getElementById('newsletterMessage');
+                if (msgDiv) {
+                    msgDiv.className = 'form-message';
+                    msgDiv.textContent = '';
+                }
+            }, 5000);
         }
     });
 }
