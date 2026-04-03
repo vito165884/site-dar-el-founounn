@@ -1,83 +1,71 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// save_contact.php - Version complète avec votre endpoint
 require_once 'config.php';
 
-// Vérifier que c'est une requête POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    sendJSONResponse(false, 'Méthode non autorisée');
-}
+header('Content-Type: application/json');
 
-// Récupérer les données (JSON ou formulaire)
-$input = [];
+// VOTRE ENDPOINT FORMPREE
+$FORMSPREE_ENDPOINT = 'https://formspree.io/f/xaqlpewe';
 
-if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
-    $json = file_get_contents('php://input');
-    $input = json_decode($json, true);
-} else {
-    $input = $_POST;
-}
+// Récupération des données
+$name = trim($_POST['name'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$phone = trim($_POST['phone'] ?? '');
+$subject = trim($_POST['subject'] ?? '');
+$message = trim($_POST['message'] ?? '');
 
-// Validation des champs
-$name = trim($input['name'] ?? '');
-$email = trim($input['email'] ?? '');
-$phone = trim($input['phone'] ?? '');
-$subject = trim($input['subject'] ?? '');
-$message = trim($input['message'] ?? '');
-
+// Validation
 $errors = [];
-
-if (empty($name)) {
-    $errors[] = 'Le nom est requis';
-} elseif (strlen($name) < 2) {
-    $errors[] = 'Le nom doit contenir au moins 2 caractères';
-}
-
-if (empty($email)) {
-    $errors[] = 'L\'email est requis';
-} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors[] = 'Email invalide';
-}
-
-if (empty($subject)) {
-    $errors[] = 'Le sujet est requis';
-}
-
-if (empty($message)) {
-    $errors[] = 'Le message est requis';
-} elseif (strlen($message) < 10) {
-    $errors[] = 'Le message doit contenir au moins 10 caractères';
-}
+if (empty($name)) $errors[] = 'Nom requis';
+if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Email invalide';
+if (empty($message)) $errors[] = 'Message requis';
 
 if (!empty($errors)) {
-    sendJSONResponse(false, implode(', ', $errors));
+    echo json_encode(['success' => false, 'message' => implode(', ', $errors)]);
+    exit;
 }
 
-// Connexion à la base de données
+// ========== ENVOI VERS FORMSPREE ==========
+$ch = curl_init($FORMSPREE_ENDPOINT);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+    'name' => $name,
+    'email' => $email,
+    'phone' => $phone,
+    'subject' => $subject,
+    'message' => $message,
+    '_subject' => 'Dar El Founoun - ' . $subject,
+    '_replyto' => $email
+]));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
+curl_close($ch);
+
+// ========== SAUVEGARDE DANS MySQL ==========
+$dbSuccess = false;
 $pdo = getDBConnection();
-if (!$pdo) {
-    sendJSONResponse(false, 'Erreur de connexion à la base de données');
+if ($pdo) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO contacts (name, email, phone, subject, message, ip_address, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW())
+        ");
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $dbSuccess = $stmt->execute([$name, $email, $phone, $subject, $message, $ip]);
+    } catch (PDOException $e) {
+        error_log("Erreur MySQL: " . $e->getMessage());
+    }
 }
 
-try {
-    $ip = getClientIP();
-    
-    $stmt = $pdo->prepare("
-        INSERT INTO contacts (name, email, phone, subject, message, ip_address, created_at) 
-        VALUES (?, ?, ?, ?, ?, ?, NOW())
-    ");
-    
-    $result = $stmt->execute([$name, $email, $phone, $subject, $message, $ip]);
-    
-    if ($result) {
-        sendJSONResponse(true, '✅ Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
-    } else {
-        sendJSONResponse(false, '❌ Une erreur est survenue lors de l\'envoi du message');
-    }
-    
-} catch (PDOException $e) {
-    error_log("Erreur insertion contact: " . $e->getMessage());
-    sendJSONResponse(false, '❌ Une erreur technique est survenue');
+// ========== RÉPONSE ==========
+if ($httpCode === 200 || $dbSuccess) {
+    echo json_encode(['success' => true, 'message' => '✅ Message envoyé avec succès !']);
+} else {
+    echo json_encode(['success' => false, 'message' => '❌ Erreur lors de l\'envoi']);
 }
 ?>
