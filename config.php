@@ -20,6 +20,33 @@ function getDBConnection() {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
             $pdo->exec("USE `$dbname`");
+            
+            // Créer la table contacts
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS `contacts` (
+                    `id` INT AUTO_INCREMENT PRIMARY KEY,
+                    `name` VARCHAR(100) NOT NULL,
+                    `email` VARCHAR(100) NOT NULL,
+                    `phone` VARCHAR(20),
+                    `subject` VARCHAR(100),
+                    `message` TEXT NOT NULL,
+                    `ip_address` VARCHAR(45),
+                    `formspree_sent` TINYINT DEFAULT 0,
+                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ");
+            
+            // Créer la table newsletter
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS `newsletter` (
+                    `id` INT AUTO_INCREMENT PRIMARY KEY,
+                    `email` VARCHAR(100) NOT NULL UNIQUE,
+                    `ip_address` VARCHAR(45),
+                    `formspree_sent` TINYINT DEFAULT 0,
+                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ");
+            
             return $pdo;
         } catch(PDOException $e2) {
             error_log("Erreur connexion DB: " . $e2->getMessage());

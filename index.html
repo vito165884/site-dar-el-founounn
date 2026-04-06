@@ -802,7 +802,7 @@ if (contactForm) {
     });
 }
 
-// Newsletter
+// ========== NEWSLETTER CORRIGÉE ==========
 const newsletterForm = document.getElementById('newsletterForm');
 if (newsletterForm) {
     newsletterForm.addEventListener('submit', async (e) => {
@@ -811,65 +811,8 @@ if (newsletterForm) {
         const email = document.getElementById('newsletterEmail').value;
         const submitBtn = newsletterForm.querySelector('button');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        submitBtn.disabled = true;
         
-        const formData = new FormData();
-        formData.append('email', email);
-        
-        try {
-            const response = await fetch('save_newsletter.php', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await response.json();
-            
-            const t = translations[currentLang];
-            const msgDiv = document.getElementById('newsletterMessage');
-            
-            if (result.success) {
-                if (msgDiv) {
-                    msgDiv.textContent = '✅ ' + (t.msg_newsletter_success || result.message);
-                    msgDiv.className = 'form-message success';
-                    msgDiv.style.display = 'block';
-                }
-                document.getElementById('newsletterEmail').value = '';
-                setTimeout(() => {
-                    if (msgDiv) msgDiv.style.display = 'none';
-                }, 5000);
-            } else {
-                if (msgDiv) {
-                    msgDiv.textContent = '❌ ' + (t.msg_error || result.message);
-                    msgDiv.className = 'form-message error';
-                    msgDiv.style.display = 'block';
-                }
-            }
-        } catch (error) {
-            console.error('Erreur:', error);
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }
-    });
-}
-
-// Exposer les fonctions globalement
-window.showProductDetails = showProductDetails;
-window.closeModal = closeModal;
-window.setLanguage = setLanguage;
-window.currentLang = currentLang;
-</script>
-
-// ========== NEWSLETTER ==========
-const newsletterForm = document.getElementById('newsletterForm');
-if (newsletterForm) {
-    newsletterForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('newsletterEmail').value;
-        const submitBtn = newsletterForm.querySelector('button');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi...';
         submitBtn.disabled = true;
         
         const formData = new FormData();
@@ -891,12 +834,11 @@ if (newsletterForm) {
             }
         } catch (error) {
             console.error('Erreur:', error);
-            showMessage('newsletterMessage', '❌ Erreur de connexion au serveur. Veuillez réessayer.', 'error');
+            showMessage('newsletterMessage', '❌ Erreur de connexion', 'error');
         } finally {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
             
-            // Cacher le message après 5 secondes
             setTimeout(() => {
                 const msgDiv = document.getElementById('newsletterMessage');
                 if (msgDiv) {
@@ -907,8 +849,19 @@ if (newsletterForm) {
         }
     });
 }
+
+
+// Exposer les fonctions globalement
+window.showProductDetails = showProductDetails;
+window.closeModal = closeModal;
+window.setLanguage = setLanguage;
+window.currentLang = currentLang;
+</script>
+
+
 </script>
 <script src="ai-assistant.js"></script>
 <script src="theme-manager.js"></script>
+
 </body>
 </html>

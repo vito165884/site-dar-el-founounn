@@ -81,7 +81,6 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
             <button class="tab-btn" data-tab="newsletter"><i class="fas fa-users"></i> Newsletter (<?= $totalNewsletter ?>)</button>
         </div>
         
-        <!-- Messages de contact -->
         <div id="contacts-tab" class="tab-content active">
             <div class="table-container">
                 <table>
@@ -97,7 +96,7 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
                                 <td><?= htmlspecialchars($c['email']) ?></td>
                                 <td><?= htmlspecialchars($c['phone'] ?: '-') ?></td>
                                 <td><?= htmlspecialchars($c['subject'] ?: '-') ?></td>
-                                <td style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($c['message']) ?>">
+                                <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($c['message']) ?>">
                                     <?= htmlspecialchars(mb_substr($c['message'], 0, 50)) ?>...
                                 </td>
                                 <td><?= date('d/m/Y H:i', strtotime($c['created_at'])) ?></td>
@@ -118,7 +117,6 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
             </div>
         </div>
         
-        <!-- Newsletter -->
         <div id="newsletter-tab" class="tab-content">
             <div class="table-container">
                 <table>
@@ -152,7 +150,7 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
             <h4><i class="fas fa-info-circle"></i> Informations :</h4>
             <ul style="margin-left: 1.5rem;">
                 <li>✅ Messages avec badge "Envoyé" = bien transmis à Formspree</li>
-                <li>⚠️ Messages avec badge "En attente" = uniquement en base (problème d'envoi email)</li>
+                <li>⚠️ Messages avec badge "En attente" = uniquement en base</li>
                 <li>📧 Formspree : <a href="https://formspree.io/login" target="_blank">https://formspree.io/login</a></li>
                 <li>🗄️ phpMyAdmin : <a href="http://localhost/phpmyadmin" target="_blank">http://localhost/phpmyadmin</a></li>
             </ul>
@@ -173,4 +171,3 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
     </script>
 </body>
 </html>
-http://localhost/dar_elfounoun/admin.php

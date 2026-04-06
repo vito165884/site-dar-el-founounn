@@ -1,83 +1,87 @@
-<?php
-// save_newsletter.php - Version sans colonne formspree_sent
-require_once 'config.php';
-
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
-
-$FORMSPREE_NEWSLETTER_ENDPOINT = 'https://formspree.io/f/xgopnaer';
-
-$email = trim($_POST['email'] ?? '');
-
-if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['success' => false, 'message' => 'Email invalide']);
-    exit;
-}
-
-$formspreeSent = false;
-$dbSaved = false;
-$messages = [];
-
-// ========== 1. ENVOI VERS FORMSPREE ==========
-$ch = curl_init($FORMSPREE_NEWSLETTER_ENDPOINT);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-    'email' => $email,
-    '_subject' => 'Nouvel abonné newsletter - Dar El Founoun'
-]));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
-
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
-
-if ($httpCode === 200) {
-    $formspreeSent = true;
-    $messages[] = '✅ Newsletter envoyée';
-} else {
-    $messages[] = '⚠️ Envoi newsletter échoué';
-}
-
-// ========== 2. SAUVEGARDE DANS LA BASE DE DONNÉES ==========
-$pdo = getDBConnection();
-
-if ($pdo) {
-    try {
-        // Vérifier si la colonne formspree_sent existe
-        $columns = $pdo->query("SHOW COLUMNS FROM newsletter")->fetchAll(PDO::FETCH_COLUMN);
-        
-        if (in_array('formspree_sent', $columns)) {
-            $stmt = $pdo->prepare("INSERT IGNORE INTO newsletter (email, ip_address, formspree_sent) VALUES (?, ?, ?)");
-            $ip = getClientIP();
-            $stmt->execute([$email, $ip, $formspreeSent ? 1 : 0]);
-        } else {
-            $stmt = $pdo->prepare("INSERT IGNORE INTO newsletter (email, ip_address) VALUES (?, ?)");
-            $ip = getClientIP();
-            $stmt->execute([$email, $ip]);
+<script>
+// ========== NOTIFICATION NEWSLETTER PERSO ==========
+(function() {
+    // Attendre que le formulaire newsletter existe
+    setTimeout(() => {
+        const newsletterForm = document.getElementById('newsletterForm');
+        if (newsletterForm) {
+            // Sauvegarder l'ancien submit
+            const originalSubmit = newsletterForm.submit;
+            
+            // Ajouter notre notification sans casser l'existant
+            newsletterForm.addEventListener('submit', function(e) {
+                // Attendre un peu que le message s'affiche
+                setTimeout(() => {
+                    const msgDiv = document.getElementById('newsletterMessage');
+                    if (msgDiv && msgDiv.textContent.includes('succès') || msgDiv.textContent.includes('réussie') || msgDiv.textContent.includes('envoyé')) {
+                        showCustomNotif('Email envoyé via Formspree | Données enregistrées en base');
+                    }
+                }, 500);
+            });
         }
         
-        if ($stmt->rowCount() > 0) {
-            $dbSaved = true;
-            $messages[] = '✅ Email enregistré en base';
-        } else {
-            $messages[] = '⚠️ Email déjà inscrit';
+        function showCustomNotif(message) {
+            // Supprimer ancienne notif
+            const old = document.getElementById('customNotif');
+            if (old) old.remove();
+            
+            // Créer notif
+            const notif = document.createElement('div');
+            notif.id = 'customNotif';
+            notif.innerHTML = `
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 14px 20px;
+                    background: #10b981;
+                    color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    font-family: 'Inter', sans-serif;
+                    font-size: 14px;
+                    font-weight: 500;
+                    min-width: 350px;
+                ">
+                    <i class="fas fa-check-circle" style="font-size: 18px;"></i>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        background: none;
+                        border: none;
+                        color: white;
+                        font-size: 18px;
+                        cursor: pointer;
+                        margin-left: auto;
+                        padding: 0 5px;
+                        opacity: 0.7;
+                    ">&times;</button>
+                </div>
+            `;
+            notif.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+            `;
+            
+            document.body.appendChild(notif);
+            
+            setTimeout(() => notif.remove(), 4000);
         }
         
-    } catch (PDOException $e) {
-        $messages[] = '❌ Erreur DB';
-        error_log("Erreur MySQL: " . $e->getMessage());
-    }
-} else {
-    $messages[] = '❌ Connexion base impossible';
-}
-
-$success = ($formspreeSent || $dbSaved);
-echo json_encode([
-    'success' => $success,
-    'message' => implode(' | ', $messages)
-]);
-?>
+        // Ajouter l'animation si pas présente
+        if (!document.getElementById('notifStyle')) {
+            const style = document.createElement('style');
+            style.id = 'notifStyle';
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { opacity: 0; transform: translateX(100px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }, 1000);
+})();
+</script>
