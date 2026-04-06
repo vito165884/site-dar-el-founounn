@@ -173,3 +173,4 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
     </script>
 </body>
 </html>
+http://localhost/dar_elfounoun/admin.php

@@ -265,287 +265,489 @@ html[dir="rtl"] { direction: rtl; }
 <div id="modalContent"></div>
 </div>
 </div>
+
 <script>
+// ========== TRADUCTIONS CENTRALISÉES ==========
 const translations = {
-fr: {
-logo: "Dar El <span>Founoun</span>",
-nav_home: "Accueil",
-nav_products: "Produits",
-nav_contact: "Contact",
-hero_badge: "✨ Excellence depuis 1995",
-hero_title: "Dar El",
-hero_title_gradient: "Founoun",
-hero_subtitle: "L'élégance de l'impression, la beauté de l'art",
-hero_description: "Découvrez notre collection exclusive de produits d'impression haut de gamme",
-hero_btn_products: "Découvrir nos produits",
-hero_btn_contact: "Nous contacter",
-products_tag: "Notre Catalogue",
-products_title: "Nos Produits",
-products_title_highlight: "d'Exception",
-products_subtitle: "Des créations uniques pour tous vos besoins d'impression",
-filter_all: "Tous",
-filter_stationery: "Papeterie",
-filter_advertising: "Publicitaire",
-filter_luxury: "Luxe",
-filter_art: "Art & Design",
-stats_clients: "Clients satisfaits",
-stats_projects: "Projets réalisés",
-stats_years: "Années d'expertise",
-stats_partners: "Partenaires",
-contact_tag: "Contactez-nous",
-contact_title: "Parlons de",
-contact_title_highlight: "votre projet",
-contact_description: "Notre équipe est à votre écoute pour tous vos besoins d'impression.",
-contact_address: "Adresse",
-contact_phone: "Téléphone",
-contact_email: "Email",
-contact_form_name: "Nom complet",
-contact_form_email: "Email",
-contact_form_phone: "Téléphone",
-contact_form_subject: "Sujet",
-contact_form_message: "Votre message",
-contact_form_submit: "Envoyer le message",
-contact_form_quote: "Demande de devis",
-contact_form_info: "Demande d'information",
-contact_form_appointment: "Prise de rendez-vous",
-footer_title: "Dar El Founoun",
-footer_about: "Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995.",
-footer_quick_links: "Liens rapides",
-footer_newsletter: "Newsletter",
-footer_newsletter_text: "Recevez nos offres spéciales",
-footer_newsletter_placeholder: "Votre email",
-footer_copyright: "© 2024 Dar El Founoun - Tous droits réservés",
-product_details: "En savoir plus"
-},
-ar: {
-logo: "دار <span>الفنون</span>",
-nav_home: "الرئيسية",
-nav_products: "المنتجات",
-nav_contact: "اتصل بنا",
-hero_badge: "✨ التميز منذ 1995",
-hero_title: "دار",
-hero_title_gradient: "الفنون",
-hero_subtitle: "أناقة الطباعة، جمال الفن",
-hero_description: "اكتشف مجموعتنا الحصرية من منتجات الطباعة الفاخرة",
-hero_btn_products: "اكتشف منتجاتنا",
-hero_btn_contact: "اتصل بنا",
-products_tag: "كتالوجنا",
-products_title: "منتجاتنا",
-products_title_highlight: "الاستثنائية",
-products_subtitle: "إبداعات فريدة لجميع احتياجات الطباعة الخاصة بك",
-filter_all: "الكل",
-filter_stationery: "القرطاسية",
-filter_advertising: "الإعلانات",
-filter_luxury: "الفخامة",
-filter_art: "الفن والتصميم",
-stats_clients: "عملاء راضون",
-stats_projects: "مشاريع منجزة",
-stats_years: "سنوات من الخبرة",
-stats_partners: "شركاء",
-contact_tag: "اتصل بنا",
-contact_title: "تحدث عن",
-contact_title_highlight: "مشروعك",
-contact_description: "فريقنا في انتظاركم لتلبية جميع احتياجات الطباعة الخاصة بكم.",
-contact_address: "العنوان",
-contact_phone: "الهاتف",
-contact_email: "البريد الإلكتروني",
-contact_form_name: "الاسم الكامل",
-contact_form_email: "البريد الإلكتروني",
-contact_form_phone: "الهاتف",
-contact_form_subject: "الموضوع",
-contact_form_message: "رسالتك",
-contact_form_submit: "إرسال الرسالة",
-contact_form_quote: "طلب عرض سعر",
-contact_form_info: "طلب معلومات",
-contact_form_appointment: "تحديد موعد",
-footer_title: "دار الفنون",
-footer_about: "شريككم المفضل لجميع احتياجات الطباعة منذ 1995.",
-footer_quick_links: "روابط سريعة",
-footer_newsletter: "النشرة البريدية",
-footer_newsletter_text: "احصل على عروضنا الخاصة",
-footer_newsletter_placeholder: "بريدك الإلكتروني",
-footer_copyright: "© 2024 دار الفنون - جميع الحقوق محفوظة",
-product_details: "اعرف المزيد"
-},
-en: {
-logo: "Dar El <span>Founoun</span>",
-nav_home: "Home",
-nav_products: "Products",
-nav_contact: "Contact",
-hero_badge: "✨ Excellence since 1995",
-hero_title: "Dar El",
-hero_title_gradient: "Founoun",
-hero_subtitle: "The elegance of printing, the beauty of art",
-hero_description: "Discover our exclusive collection of premium printing products",
-hero_btn_products: "Discover our products",
-hero_btn_contact: "Contact us",
-products_tag: "Our Catalog",
-products_title: "Our",
-products_title_highlight: "Exceptional Products",
-products_subtitle: "Unique creations for all your printing needs",
-filter_all: "All",
-filter_stationery: "Stationery",
-filter_advertising: "Advertising",
-filter_luxury: "Luxury",
-filter_art: "Art & Design",
-stats_clients: "Happy Clients",
-stats_projects: "Projects Completed",
-stats_years: "Years of Expertise",
-stats_partners: "Partners",
-contact_tag: "Contact Us",
-contact_title: "Let's Talk About",
-contact_title_highlight: "Your Project",
-contact_description: "Our team is here for all your printing needs.",
-contact_address: "Address",
-contact_phone: "Phone",
-contact_email: "Email",
-contact_form_name: "Full Name",
-contact_form_email: "Email",
-contact_form_phone: "Phone",
-contact_form_subject: "Subject",
-contact_form_message: "Your Message",
-contact_form_submit: "Send Message",
-contact_form_quote: "Quote Request",
-contact_form_info: "Information Request",
-contact_form_appointment: "Appointment",
-footer_title: "Dar El Founoun",
-footer_about: "Your trusted partner for all your printing needs since 1995.",
-footer_quick_links: "Quick Links",
-footer_newsletter: "Newsletter",
-footer_newsletter_text: "Receive our special offers",
-footer_newsletter_placeholder: "Your email",
-footer_copyright: "© 2024 Dar El Founoun - All rights reserved",
-product_details: "Learn more"
-}
+    fr: {
+        logo: "Dar El <span>Founoun</span>",
+        nav_home: "Accueil",
+        nav_products: "Produits",
+        nav_contact: "Contact",
+        hero_badge: "✨ Excellence depuis 1995",
+        hero_title: "Dar El",
+        hero_title_gradient: "Founoun",
+        hero_subtitle: "L'élégance de l'impression, la beauté de l'art",
+        hero_description: "Découvrez notre collection exclusive de produits d'impression haut de gamme",
+        hero_btn_products: "Découvrir nos produits",
+        hero_btn_contact: "Nous contacter",
+        products_tag: "Notre Catalogue",
+        products_title: "Nos Produits",
+        products_title_highlight: "d'Exception",
+        products_subtitle: "Des créations uniques pour tous vos besoins d'impression",
+        filter_all: "Tous",
+        filter_stationery: "Papeterie",
+        filter_advertising: "Publicitaire",
+        filter_luxury: "Luxe",
+        filter_art: "Art & Design",
+        stats_clients: "Clients satisfaits",
+        stats_projects: "Projets réalisés",
+        stats_years: "Années d'expertise",
+        stats_partners: "Partenaires",
+        contact_tag: "Contactez-nous",
+        contact_title: "Parlons de",
+        contact_title_highlight: "votre projet",
+        contact_description: "Notre équipe est à votre écoute pour tous vos besoins d'impression.",
+        contact_address: "Adresse",
+        contact_phone: "Téléphone",
+        contact_email: "Email",
+        contact_form_name: "Nom complet",
+        contact_form_email: "Email",
+        contact_form_phone: "Téléphone",
+        contact_form_message: "Votre message",
+        contact_form_submit: "Envoyer le message",
+        contact_form_quote: "Demande de devis",
+        contact_form_info: "Demande d'information",
+        contact_form_appointment: "Prise de rendez-vous",
+        footer_title: "Dar El Founoun",
+        footer_about: "Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995.",
+        footer_quick_links: "Liens rapides",
+        footer_newsletter: "Newsletter",
+        footer_newsletter_text: "Recevez nos offres spéciales",
+        footer_newsletter_placeholder: "Votre email",
+        footer_copyright: "© 2024 Dar El Founoun - Tous droits réservés",
+        product_details: "En savoir plus",
+        // Assistant AI
+        ai_welcome: "Bonjour ! Je suis l'assistant de Dar El Founoun",
+        ai_help: "Comment puis-je vous aider ?",
+        ai_products: "📋 Produits",
+        ai_prices: "💰 Prix",
+        ai_quote: "📄 Devis",
+        ai_deadlines: "⏱️ Délais",
+        ai_contact: "📍 Contact"
+    },
+    ar: {
+        logo: "دار <span>الفنون</span>",
+        nav_home: "الرئيسية",
+        nav_products: "المنتجات",
+        nav_contact: "اتصل بنا",
+        hero_badge: "✨ التميز منذ 1995",
+        hero_title: "دار",
+        hero_title_gradient: "الفنون",
+        hero_subtitle: "أناقة الطباعة، جمال الفن",
+        hero_description: "اكتشف مجموعتنا الحصرية من منتجات الطباعة الفاخرة",
+        hero_btn_products: "اكتشف منتجاتنا",
+        hero_btn_contact: "اتصل بنا",
+        products_tag: "كتالوجنا",
+        products_title: "منتجاتنا",
+        products_title_highlight: "الاستثنائية",
+        products_subtitle: "إبداعات فريدة لجميع احتياجات الطباعة الخاصة بك",
+        filter_all: "الكل",
+        filter_stationery: "القرطاسية",
+        filter_advertising: "الإعلانات",
+        filter_luxury: "الفخامة",
+        filter_art: "الفن والتصميم",
+        stats_clients: "عملاء راضون",
+        stats_projects: "مشاريع منجزة",
+        stats_years: "سنوات من الخبرة",
+        stats_partners: "شركاء",
+        contact_tag: "اتصل بنا",
+        contact_title: "تحدث عن",
+        contact_title_highlight: "مشروعك",
+        contact_description: "فريقنا في انتظاركم لتلبية جميع احتياجات الطباعة الخاصة بكم.",
+        contact_address: "العنوان",
+        contact_phone: "الهاتف",
+        contact_email: "البريد الإلكتروني",
+        contact_form_name: "الاسم الكامل",
+        contact_form_email: "البريد الإلكتروني",
+        contact_form_phone: "الهاتف",
+        contact_form_message: "رسالتك",
+        contact_form_submit: "إرسال الرسالة",
+        contact_form_quote: "طلب عرض سعر",
+        contact_form_info: "طلب معلومات",
+        contact_form_appointment: "تحديد موعد",
+        footer_title: "دار الفنون",
+        footer_about: "شريككم المفضل لجميع احتياجات الطباعة منذ 1995.",
+        footer_quick_links: "روابط سريعة",
+        footer_newsletter: "النشرة البريدية",
+        footer_newsletter_text: "احصل على عروضنا الخاصة",
+        footer_newsletter_placeholder: "بريدك الإلكتروني",
+        footer_copyright: "© 2024 دار الفنون - جميع الحقوق محفوظة",
+        product_details: "اعرف المزيد",
+        ai_welcome: "مرحباً! أنا مساعد دار الفنون",
+        ai_help: "كيف يمكنني مساعدتك؟",
+        ai_products: "📋 المنتجات",
+        ai_prices: "💰 الأسعار",
+        ai_quote: "📄 عرض سعر",
+        ai_deadlines: "⏱️ المواعيد",
+        ai_contact: "📍 اتصل بنا"
+    },
+    en: {
+        logo: "Dar El <span>Founoun</span>",
+        nav_home: "Home",
+        nav_products: "Products",
+        nav_contact: "Contact",
+        hero_badge: "✨ Excellence since 1995",
+        hero_title: "Dar El",
+        hero_title_gradient: "Founoun",
+        hero_subtitle: "The elegance of printing, the beauty of art",
+        hero_description: "Discover our exclusive collection of premium printing products",
+        hero_btn_products: "Discover our products",
+        hero_btn_contact: "Contact us",
+        products_tag: "Our Catalog",
+        products_title: "Our",
+        products_title_highlight: "Exceptional Products",
+        products_subtitle: "Unique creations for all your printing needs",
+        filter_all: "All",
+        filter_stationery: "Stationery",
+        filter_advertising: "Advertising",
+        filter_luxury: "Luxury",
+        filter_art: "Art & Design",
+        stats_clients: "Happy Clients",
+        stats_projects: "Projects Completed",
+        stats_years: "Years of Expertise",
+        stats_partners: "Partners",
+        contact_tag: "Contact Us",
+        contact_title: "Let's Talk About",
+        contact_title_highlight: "Your Project",
+        contact_description: "Our team is here for all your printing needs.",
+        contact_address: "Address",
+        contact_phone: "Phone",
+        contact_email: "Email",
+        contact_form_name: "Full Name",
+        contact_form_email: "Email",
+        contact_form_phone: "Phone",
+        contact_form_message: "Your Message",
+        contact_form_submit: "Send Message",
+        contact_form_quote: "Quote Request",
+        contact_form_info: "Information Request",
+        contact_form_appointment: "Appointment",
+        footer_title: "Dar El Founoun",
+        footer_about: "Your trusted partner for all your printing needs since 1995.",
+        footer_quick_links: "Quick Links",
+        footer_newsletter: "Newsletter",
+        footer_newsletter_text: "Receive our special offers",
+        footer_newsletter_placeholder: "Your email",
+        footer_copyright: "© 2024 Dar El Founoun - All rights reserved",
+        product_details: "Learn more",
+        ai_welcome: "Hello! I'm Dar El Founoun's assistant",
+        ai_help: "How can I help you?",
+        ai_products: "📋 Products",
+        ai_prices: "💰 Prices",
+        ai_quote: "📄 Quote",
+        ai_deadlines: "⏱️ Deadlines",
+        ai_contact: "📍 Contact"
+    }
 };
+
+// Données des produits
 const products = [
-{ id: 1, name: "Cartes de Visite Premium", desc: "Papier luxe 350g, finition mate ou brillante", price: "Dès 50 DT", category: "papeterie", icon: "fa-id-card", details: "Impression recto-verso, vernis sélectif disponible." },
-{ id: 2, name: "Flyers Publicitaires", desc: "Format A5, papier couché 135g", price: "Dès 80 DT/1000", category: "publicitaire", icon: "fa-file-pdf", details: "Idéal pour vos campagnes marketing." },
-{ id: 3, name: "Roll-up Professionnel", desc: "Stand d'exposition, sacoche incluse", price: "Dès 120 DT", category: "publicitaire", icon: "fa-chart-line", details: "Idéal pour salons et événements." },
-{ id: 4, name: "Toiles d'Art", desc: "Impression sur toile, châssis bois", price: "Dès 65 DT", category: "art", icon: "fa-paintbrush", details: "Reproductions d'œuvres d'art." },
-{ id: 5, name: "Faire-part Mariage", desc: "Découpe laser, ruban satin", price: "Dès 3 DT/pièce", category: "luxe", icon: "fa-heart", details: "Personnalisation complète." },
-{ id: 6, name: "Catalogue de Luxe", desc: "Reliure cousue, papier texturé", price: "Sur devis", category: "luxe", icon: "fa-book-open", details: "Finition haut de gamme." }
+    { id: 1, name: "Cartes de Visite Premium", name_ar: "بطاقات عمل فاخرة", name_en: "Premium Business Cards", desc: "Papier luxe 350g, finition mate ou brillante", desc_ar: "ورق فاخر 350 جرام، لمسة غير لامعة أو لامعة", desc_en: "Luxury 350g paper, matte or glossy finish", price: "Dès 50 DT", category: "papeterie", icon: "fa-id-card", details: "Impression recto-verso, vernis sélectif disponible.", details_ar: "طباعة وجهين، ورنيش انتقائي متوفر.", details_en: "Double-sided printing, selective varnish available." },
+    { id: 2, name: "Flyers Publicitaires", name_ar: "منشورات إعلانية", name_en: "Advertising Flyers", desc: "Format A5, papier couché 135g", desc_ar: "مقاس A5، ورق مطلي 135 جرام", desc_en: "A5 format, 135g coated paper", price: "Dès 80 DT/1000", category: "publicitaire", icon: "fa-file-pdf", details: "Idéal pour vos campagnes marketing.", details_ar: "مثالي لحملاتك التسويقية.", details_en: "Ideal for your marketing campaigns." },
+    { id: 3, name: "Roll-up Professionnel", name_ar: "رول آب احترافي", name_en: "Professional Roll-up", desc: "Stand d'exposition, sacoche incluse", desc_ar: "منصة عرض، حقيبة حمل متضمنة", desc_en: "Display stand, carrying bag included", price: "Dès 120 DT", category: "publicitaire", icon: "fa-chart-line", details: "Idéal pour salons et événements.", details_ar: "مثالي للمعارض والفعاليات.", details_en: "Ideal for trade shows and events." },
+    { id: 4, name: "Toiles d'Art", name_ar: "لوحات فنية", name_en: "Art Canvases", desc: "Impression sur toile, châssis bois", desc_ar: "طباعة على قماش، هيكل خشبي", desc_en: "Canvas printing, wooden frame", price: "Dès 65 DT", category: "art", icon: "fa-paintbrush", details: "Reproductions d'œuvres d'art.", details_ar: "نسخ من الأعمال الفنية.", details_en: "Reproductions of artworks." },
+    { id: 5, name: "Faire-part Mariage", name_ar: "بطاقات دعوة زفاف", name_en: "Wedding Invitations", desc: "Découpe laser, ruban satin", desc_ar: "قطع بالليزر، شريط ساتان", desc_en: "Laser cut, satin ribbon", price: "Dès 3 DT/pièce", category: "luxe", icon: "fa-heart", details: "Personnalisation complète.", details_ar: "تخصيص كامل.", details_en: "Complete customization." },
+    { id: 6, name: "Catalogue de Luxe", name_ar: "كتالوج فاخر", name_en: "Luxury Catalog", desc: "Reliure cousue, papier texturé", desc_ar: "تجليد مخيط، ورق منقوش", desc_en: "Sewn binding, textured paper", price: "Sur devis", category: "luxe", icon: "fa-book-open", details: "Finition haut de gamme.", details_ar: "تشطيب فاخر.", details_en: "Premium finishing." }
 ];
-let currentCategory = 'all';
-let currentLang = 'fr';
+
+// ========== GESTIONNAIRE DE LANGUE ==========
+let currentLang = localStorage.getItem('language') || 'fr';
+
+// Appliquer les traductions à la page
 function applyTranslations() {
-const t = translations[currentLang];
-document.getElementById('logo').innerHTML = t.logo;
-document.getElementById('navHome').textContent = t.nav_home;
-document.getElementById('navProducts').textContent = t.nav_products;
-document.getElementById('navContact').textContent = t.nav_contact;
-document.getElementById('heroBadge').textContent = t.hero_badge;
-document.getElementById('heroTitle').textContent = t.hero_title;
-document.getElementById('heroTitleGradient').textContent = t.hero_title_gradient;
-document.getElementById('heroSubtitle').textContent = t.hero_subtitle;
-document.getElementById('heroDescription').textContent = t.hero_description;
-document.getElementById('heroBtnProducts').innerHTML = t.hero_btn_products + ' <i class="fas fa-arrow-right"></i>';
-document.getElementById('heroBtnContact').textContent = t.hero_btn_contact;
-document.getElementById('productsTag').textContent = t.products_tag;
-document.getElementById('productsTitle').textContent = t.products_title;
-document.getElementById('productsTitleHighlight').textContent = t.products_title_highlight;
-document.getElementById('productsSubtitle').textContent = t.products_subtitle;
-document.getElementById('filterAll').innerHTML = '<i class="fas fa-th-large"></i> ' + t.filter_all + ' (24)';
-document.getElementById('filterStationery').innerHTML = '<i class="fas fa-envelope"></i> ' + t.filter_stationery + ' (8)';
-document.getElementById('filterAdvertising').innerHTML = '<i class="fas fa-chart-line"></i> ' + t.filter_advertising + ' (6)';
-document.getElementById('filterLuxury').innerHTML = '<i class="fas fa-gem"></i> ' + t.filter_luxury + ' (5)';
-document.getElementById('filterArt').innerHTML = '<i class="fas fa-palette"></i> ' + t.filter_art + ' (5)';
-document.getElementById('statLabel1').textContent = t.stats_clients;
-document.getElementById('statLabel2').textContent = t.stats_projects;
-document.getElementById('statLabel3').textContent = t.stats_years;
-document.getElementById('statLabel4').textContent = t.stats_partners;
-document.getElementById('contactTag').textContent = t.contact_tag;
-document.getElementById('contactTitle').textContent = t.contact_title;
-document.getElementById('contactTitleHighlight').textContent = t.contact_title_highlight;
-document.getElementById('contactDescription').textContent = t.contact_description;
-document.getElementById('contactAddress').textContent = t.contact_address;
-document.getElementById('contactPhone').textContent = t.contact_phone;
-document.getElementById('contactEmail').textContent = t.contact_email;
-document.getElementById('submitBtn').innerHTML = t.contact_form_submit + ' <i class="fas fa-paper-plane"></i>';
-document.getElementById('footerTitle').textContent = t.footer_title;
-document.getElementById('footerAbout').textContent = t.footer_about;
-document.getElementById('footerQuickLinks').textContent = t.footer_quick_links;
-document.getElementById('footerHome').textContent = t.nav_home;
-document.getElementById('footerProducts').textContent = t.nav_products;
-document.getElementById('footerContact').textContent = t.nav_contact;
-document.getElementById('footerNewsletter').textContent = t.footer_newsletter;
-document.getElementById('footerNewsletterText').textContent = t.footer_newsletter_text;
-document.getElementById('footerCopyright').textContent = t.footer_copyright;
-document.querySelector('#name').placeholder = t.contact_form_name;
-document.querySelector('#email').placeholder = t.contact_form_email;
-document.querySelector('#phone').placeholder = t.contact_form_phone;
-document.querySelector('#message').placeholder = t.contact_form_message;
-document.querySelector('#newsletterEmail').placeholder = t.footer_newsletter_placeholder;
-const subjectSelect = document.querySelector('#subject');
-if(subjectSelect) {
-subjectSelect.options[0].text = t.contact_form_quote;
-subjectSelect.options[1].text = t.contact_form_info;
-subjectSelect.options[2].text = t.contact_form_appointment;
+    const t = translations[currentLang];
+    if (!t) return;
+    
+    // Mettre à jour les éléments avec data-translate
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        if (t[key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = t[key];
+            } else {
+                el.innerHTML = t[key];
+            }
+        }
+    });
+    
+    // Mettre à jour les éléments spécifiques
+    document.getElementById('logo').innerHTML = t.logo;
+    document.getElementById('navHome').textContent = t.nav_home;
+    document.getElementById('navProducts').textContent = t.nav_products;
+    document.getElementById('navContact').textContent = t.nav_contact;
+    document.getElementById('heroBadge').textContent = t.hero_badge;
+    document.getElementById('heroTitle').textContent = t.hero_title;
+    document.getElementById('heroTitleGradient').textContent = t.hero_title_gradient;
+    document.getElementById('heroSubtitle').textContent = t.hero_subtitle;
+    document.getElementById('heroDescription').textContent = t.hero_description;
+    document.getElementById('heroBtnProducts').innerHTML = t.hero_btn_products + ' <i class="fas fa-arrow-right"></i>';
+    document.getElementById('heroBtnContact').textContent = t.hero_btn_contact;
+    document.getElementById('productsTag').textContent = t.products_tag;
+    document.getElementById('productsTitle').textContent = t.products_title;
+    document.getElementById('productsTitleHighlight').textContent = t.products_title_highlight;
+    document.getElementById('productsSubtitle').textContent = t.products_subtitle;
+    
+    // Filtres
+    document.getElementById('filterAll').innerHTML = '<i class="fas fa-th-large"></i> ' + t.filter_all + ' (24)';
+    document.getElementById('filterStationery').innerHTML = '<i class="fas fa-envelope"></i> ' + t.filter_stationery + ' (8)';
+    document.getElementById('filterAdvertising').innerHTML = '<i class="fas fa-chart-line"></i> ' + t.filter_advertising + ' (6)';
+    document.getElementById('filterLuxury').innerHTML = '<i class="fas fa-gem"></i> ' + t.filter_luxury + ' (5)';
+    document.getElementById('filterArt').innerHTML = '<i class="fas fa-palette"></i> ' + t.filter_art + ' (5)';
+    
+    // Stats
+    document.getElementById('statLabel1').textContent = t.stats_clients;
+    document.getElementById('statLabel2').textContent = t.stats_projects;
+    document.getElementById('statLabel3').textContent = t.stats_years;
+    document.getElementById('statLabel4').textContent = t.stats_partners;
+    
+    // Contact
+    document.getElementById('contactTag').textContent = t.contact_tag;
+    document.getElementById('contactTitle').textContent = t.contact_title;
+    document.getElementById('contactTitleHighlight').textContent = t.contact_title_highlight;
+    document.getElementById('contactDescription').textContent = t.contact_description;
+    document.getElementById('contactAddress').textContent = t.contact_address;
+    document.getElementById('contactPhone').textContent = t.contact_phone;
+    document.getElementById('contactEmail').textContent = t.contact_email;
+    document.getElementById('submitBtn').innerHTML = t.contact_form_submit + ' <i class="fas fa-paper-plane"></i>';
+    
+    // Footer
+    document.getElementById('footerTitle').textContent = t.footer_title;
+    document.getElementById('footerAbout').textContent = t.footer_about;
+    document.getElementById('footerQuickLinks').textContent = t.footer_quick_links;
+    document.getElementById('footerHome').textContent = t.nav_home;
+    document.getElementById('footerProducts').textContent = t.nav_products;
+    document.getElementById('footerContact').textContent = t.nav_contact;
+    document.getElementById('footerNewsletter').textContent = t.footer_newsletter;
+    document.getElementById('footerNewsletterText').textContent = t.footer_newsletter_text;
+    document.getElementById('footerCopyright').innerHTML = t.footer_copyright;
+    
+    // Placeholders
+    const nameInput = document.querySelector('#name');
+    const emailInput = document.querySelector('#email');
+    const phoneInput = document.querySelector('#phone');
+    const messageInput = document.querySelector('#message');
+    const newsletterInput = document.querySelector('#newsletterEmail');
+    
+    if (nameInput) nameInput.placeholder = t.contact_form_name;
+    if (emailInput) emailInput.placeholder = t.contact_form_email;
+    if (phoneInput) phoneInput.placeholder = t.contact_form_phone;
+    if (messageInput) messageInput.placeholder = t.contact_form_message;
+    if (newsletterInput) newsletterInput.placeholder = t.footer_newsletter_placeholder;
+    
+    // Select options
+    const subjectSelect = document.querySelector('#subject');
+    if (subjectSelect && subjectSelect.options) {
+        if (subjectSelect.options[0]) subjectSelect.options[0].text = t.contact_form_quote;
+        if (subjectSelect.options[1]) subjectSelect.options[1].text = t.contact_form_info;
+        if (subjectSelect.options[2]) subjectSelect.options[2].text = t.contact_form_appointment;
+    }
+    
+    // Re-rendre les produits
+    renderProducts();
+    
+    // Mettre à jour l'assistant AI s'il existe
+    if (window.updateAILanguage) {
+        window.updateAILanguage(currentLang);
+    }
 }
-renderProducts();
-}
+
+// Rendre les produits
 function renderProducts() {
-const grid = document.getElementById('productsGrid');
-if (!grid) return;
-const filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
-const t = translations[currentLang];
-grid.innerHTML = filtered.map(p => `<div class="product-card" onclick="showProductDetails(${p.id})">
-<div class="product-image">
-<div class="product-icon"><i class="fas ${p.icon}"></i></div>
-</div>
-<div class="product-info">
-<h3 class="product-title">${p.name}</h3>
-<p class="product-desc">${p.desc}</p>
-<div class="product-price">${p.price}</div>
-<button class="product-btn">${t.product_details} <i class="fas fa-arrow-right"></i></button>
-</div>
-</div>`).join('');
+    const grid = document.getElementById('productsGrid');
+    if (!grid) return;
+    
+    const t = translations[currentLang];
+    const filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+    
+    grid.innerHTML = filtered.map(p => {
+        // Nom du produit selon la langue
+        let productName = p.name;
+        if (currentLang === 'ar' && p.name_ar) productName = p.name_ar;
+        if (currentLang === 'en' && p.name_en) productName = p.name_en;
+        
+        // Description selon la langue
+        let productDesc = p.desc;
+        if (currentLang === 'ar' && p.desc_ar) productDesc = p.desc_ar;
+        if (currentLang === 'en' && p.desc_en) productDesc = p.desc_en;
+        
+        return `<div class="product-card" onclick="showProductDetails(${p.id})">
+            <div class="product-image">
+                <div class="product-icon"><i class="fas ${p.icon}"></i></div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${productName}</h3>
+                <p class="product-desc">${productDesc}</p>
+                <div class="product-price">${p.price}</div>
+                <button class="product-btn">${t.product_details} <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>`;
+    }).join('');
 }
+
+// Afficher les détails du produit
 function showProductDetails(id) {
-const p = products.find(p => p.id === id);
-const modal = document.getElementById('productModal');
-const t = translations[currentLang];
-const closeText = currentLang === 'ar' ? 'إغلاق' : (currentLang === 'en' ? 'Close' : 'Fermer');
-document.getElementById('modalContent').innerHTML = `<div class="modal-image" style="text-align:center; font-size:4rem; color:#e67e22;"><i class="fas ${p.icon}"></i></div>
-<h2 style="text-align:center;">${p.name}</h2>
-<p style="color:#64748b; margin:1rem 0;">${p.desc}</p>
-<div style="font-size:1.5rem; font-weight:700; color:#e67e22; text-align:center;">${p.price}</div>
-<p style="margin:1rem 0;">${p.details}</p>
-<button class="modal-close-btn" onclick="closeModal()">${closeText}</button>`;
-modal.style.display = 'flex';
+    const p = products.find(p => p.id === id);
+    const t = translations[currentLang];
+    
+    let productName = p.name;
+    let productDesc = p.desc;
+    let productDetails = p.details;
+    
+    if (currentLang === 'ar') {
+        productName = p.name_ar || p.name;
+        productDesc = p.desc_ar || p.desc;
+        productDetails = p.details_ar || p.details;
+    } else if (currentLang === 'en') {
+        productName = p.name_en || p.name;
+        productDesc = p.desc_en || p.desc;
+        productDetails = p.details_en || p.details;
+    }
+    
+    const closeText = currentLang === 'ar' ? 'إغلاق' : (currentLang === 'en' ? 'Close' : 'Fermer');
+    
+    const modal = document.getElementById('productModal');
+    const modalContent = document.getElementById('modalContent');
+    
+    if (modalContent) {
+        modalContent.innerHTML = `
+            <div class="modal-image" style="text-align:center; font-size:4rem; color:#e67e22;">
+                <i class="fas ${p.icon}"></i>
+            </div>
+            <h2 class="modal-title" style="text-align:center;">${productName}</h2>
+            <div class="modal-badge" style="display:block; text-align:center;">${p.category}</div>
+            <p class="modal-details" style="color:#64748b; margin:1rem 0;">${productDesc}</p>
+            <div class="modal-price" style="font-size:1.8rem; font-weight:700; color:#e67e22; text-align:center;">${p.price}</div>
+            <p style="margin:1rem 0; line-height:1.6;">${productDetails}</p>
+            <button class="modal-close-btn" onclick="closeModal()">${closeText}</button>
+        `;
+    }
+    
+    if (modal) modal.style.display = 'flex';
 }
+
 function closeModal() {
-document.getElementById('productModal').style.display = 'none';
+    const modal = document.getElementById('productModal');
+    if (modal) modal.style.display = 'none';
 }
-function showMessage(elementId, message, type) {
-const el = document.getElementById(elementId);
-if (el) {
-el.textContent = message;
-el.className = `form-message ${type}`;
-setTimeout(() => {
-el.className = 'form-message';
-el.textContent = '';
-}, 5000);
-}
-}
+
+// Changer la langue
 function setLanguage(lang) {
-if (!translations[lang]) return;
-currentLang = lang;
-localStorage.setItem('language', lang);
-document.querySelectorAll('.lang-btn').forEach(btn => {
-btn.classList.remove('active');
-if (btn.dataset.lang === lang) {
-btn.classList.add('active');
+    if (!translations[lang]) return;
+    
+    currentLang = lang;
+    localStorage.setItem('language', lang);
+    
+    // Mettre à jour les boutons actifs
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.lang === lang) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Changer la direction pour l'arabe
+    if (lang === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.setAttribute('lang', 'ar');
+    } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.setAttribute('lang', lang);
+    }
+    
+    // Appliquer les traductions
+    applyTranslations();
+    
+    // Notifier l'assistant AI
+    if (window.aiAssistant && window.aiAssistant.updateLanguage) {
+        window.aiAssistant.updateLanguage(lang);
+    }
 }
+
+// ========== INITIALISATION ==========
+let currentCategory = 'all';
+
+// Initialiser la langue au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    // Configurer les boutons de langue
+    const langButtons = document.querySelectorAll('.lang-btn');
+    langButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setLanguage(btn.dataset.lang);
+        });
+    });
+    
+    // Configurer les filtres
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.dataset.category;
+            renderProducts();
+        });
+    });
+    
+    // Appliquer la langue sauvegardée
+    setLanguage(currentLang);
+    
+    // Animation des statistiques
+    animateStats();
 });
-if (lang === 'ar') {
-document.documentElement.setAttribute('dir', 'rtl');
-} else {
-document.documentElement.setAttribute('dir', 'ltr');
+
+// Animation des compteurs
+function animateStats() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target') || stat.textContent.replace(/[^0-9]/g, ''), 10);
+        if (isNaN(target)) return;
+        
+        let current = 0;
+        const increment = target / 50;
+        const updateStat = () => {
+            current += increment;
+            if (current < target) {
+                stat.textContent = Math.floor(current);
+                requestAnimationFrame(updateStat);
+            } else {
+                stat.textContent = target;
+            }
+        };
+        updateStat();
+    });
 }
-applyTranslations();
+
+// Gestion du menu mobile
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+
+if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
 }
-// ========== FORMULAIRE DE CONTACT ==========
+
+// Fermer le menu en cliquant sur un lien
+document.querySelectorAll('.nav-link, .nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (menuToggle) menuToggle.classList.remove('active');
+        if (navLinks) navLinks.classList.remove('active');
+    });
+});
+
+// Header scroll effect
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (header) {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+});
+
+// ========== FORMULAIRES ==========
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
@@ -553,7 +755,7 @@ if (contactForm) {
         
         const submitBtn = contactForm.querySelector('.submit-btn');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi...';
         submitBtn.disabled = true;
         
         const formData = new FormData(contactForm);
@@ -563,24 +765,100 @@ if (contactForm) {
                 method: 'POST',
                 body: formData
             });
-            
             const result = await response.json();
             
+            const t = translations[currentLang];
+            const msgDiv = document.getElementById('formMessage');
+            
             if (result.success) {
-                showMessage('formMessage', '✅ ' + result.message, 'success');
+                if (msgDiv) {
+                    msgDiv.textContent = '✅ ' + (t.msg_success || result.message);
+                    msgDiv.className = 'form-message success';
+                    msgDiv.style.display = 'block';
+                }
                 contactForm.reset();
+                setTimeout(() => {
+                    if (msgDiv) msgDiv.style.display = 'none';
+                }, 5000);
             } else {
-                showMessage('formMessage', '❌ ' + result.message, 'error');
+                if (msgDiv) {
+                    msgDiv.textContent = '❌ ' + (t.msg_error || result.message);
+                    msgDiv.className = 'form-message error';
+                    msgDiv.style.display = 'block';
+                }
             }
         } catch (error) {
             console.error('Erreur:', error);
-            showMessage('formMessage', '❌ Erreur de connexion au serveur. Veuillez réessayer.', 'error');
+            const msgDiv = document.getElementById('formMessage');
+            if (msgDiv) {
+                msgDiv.textContent = '❌ Erreur de connexion';
+                msgDiv.className = 'form-message error';
+                msgDiv.style.display = 'block';
+            }
         } finally {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
         }
     });
 }
+
+// Newsletter
+const newsletterForm = document.getElementById('newsletterForm');
+if (newsletterForm) {
+    newsletterForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('newsletterEmail').value;
+        const submitBtn = newsletterForm.querySelector('button');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+        
+        const formData = new FormData();
+        formData.append('email', email);
+        
+        try {
+            const response = await fetch('save_newsletter.php', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            
+            const t = translations[currentLang];
+            const msgDiv = document.getElementById('newsletterMessage');
+            
+            if (result.success) {
+                if (msgDiv) {
+                    msgDiv.textContent = '✅ ' + (t.msg_newsletter_success || result.message);
+                    msgDiv.className = 'form-message success';
+                    msgDiv.style.display = 'block';
+                }
+                document.getElementById('newsletterEmail').value = '';
+                setTimeout(() => {
+                    if (msgDiv) msgDiv.style.display = 'none';
+                }, 5000);
+            } else {
+                if (msgDiv) {
+                    msgDiv.textContent = '❌ ' + (t.msg_error || result.message);
+                    msgDiv.className = 'form-message error';
+                    msgDiv.style.display = 'block';
+                }
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+// Exposer les fonctions globalement
+window.showProductDetails = showProductDetails;
+window.closeModal = closeModal;
+window.setLanguage = setLanguage;
+window.currentLang = currentLang;
+</script>
 
 // ========== NEWSLETTER ==========
 const newsletterForm = document.getElementById('newsletterForm');

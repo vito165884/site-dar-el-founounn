@@ -2,6 +2,30 @@
 (function() {
     'use strict';
     
+    // Attendre que les traductions soient chargées
+    const initTheme = () => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        
+        class ThemeManager {
+            // ... reste du code inchangé ...
+        }
+        
+        window.themeManager = new ThemeManager();
+    };
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTheme);
+    } else {
+        initTheme();
+    }
+})();
+// theme-manager.js - Version corrigée
+(function() {
+    'use strict';
+    
     // Initialisation immédiate pour éviter le flash blanc
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {

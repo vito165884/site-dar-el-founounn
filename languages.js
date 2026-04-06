@@ -1,351 +1,396 @@
-// js/languages.js - Fichier de traductions
-const translations = {
-    fr: {
-        // Navigation
-        nav_home: "Accueil",
-        nav_products: "Produits",
-        nav_contact: "Contact",
-        nav_quote: "Devis",
-        
-        // Hero section
-        hero_badge: "✨ Excellence depuis 1995",
-        hero_title: "Dar El",
-        hero_title_gradient: "Founoun",
-        hero_subtitle: "L'élégance de l'impression, la beauté de l'art",
-        hero_description: "Découvrez notre collection exclusive de produits d'impression haut de gamme",
-        hero_btn_products: "Découvrir nos produits",
-        hero_btn_contact: "Nous contacter",
-        hero_scroll: "Défiler",
-        
-        // Section produits
-        products_tag: "Notre Catalogue",
-        products_title: "Nos Produits",
-        products_title_highlight: "d'Exception",
-        products_subtitle: "Des créations uniques pour tous vos besoins d'impression",
-        
-        // Filtres
-        filter_all: "Tous",
-        filter_stationery: "Papeterie",
-        filter_advertising: "Publicitaire",
-        filter_luxury: "Luxe",
-        filter_art: "Art & Design",
-        
-        // Produits
-        product_details: "En savoir plus",
-        product_price_from: "Dès",
-        
-        // Stats
-        stats_clients: "Clients satisfaits",
-        stats_projects: "Projets réalisés",
-        stats_years: "Années d'expertise",
-        stats_partners: "Partenaires",
-        
-        // Contact
-        contact_tag: "Contactez-nous",
-        contact_title: "Parlons de",
-        contact_title_highlight: "votre projet",
-        contact_description: "Notre équipe est à votre écoute pour tous vos besoins d'impression.",
-        contact_address: "Adresse",
-        contact_phone: "Téléphone",
-        contact_email: "Email",
-        contact_hours: "Horaires",
-        contact_form_name: "Nom complet",
-        contact_form_email: "Email",
-        contact_form_phone: "Téléphone",
-        contact_form_subject: "Sujet",
-        contact_form_message: "Votre message",
-        contact_form_submit: "Envoyer le message",
-        contact_form_quote: "Demande de devis",
-        contact_form_info: "Demande d'information",
-        contact_form_appointment: "Prise de rendez-vous",
-        contact_form_other: "Autre",
-        
-        // Footer
-        footer_about: "Votre partenaire privilégié pour tous vos besoins d'impression depuis 1995.",
-        footer_quick_links: "Liens rapides",
-        footer_newsletter: "Newsletter",
-        footer_newsletter_placeholder: "Votre email",
-        footer_newsletter_btn: "S'abonner",
-        footer_copyright: "Tous droits réservés",
-        
-        // Assistant AI
-        ai_welcome: "Bonjour ! Je suis l'assistant de Dar El Founoun",
-        ai_help: "Comment puis-je vous aider ?",
-        ai_products: "📋 Produits",
-        ai_prices: "💰 Prix",
-        ai_quote: "📄 Devis",
-        ai_deadlines: "⏱️ Délais",
-        ai_contact: "📍 Contact",
-        
-        // Messages
-        msg_success: "Message envoyé avec succès !",
-        msg_error: "Une erreur est survenue",
-        msg_newsletter_success: "Inscription réussie !",
-        msg_email_invalid: "Email invalide",
-        msg_fields_required: "Tous les champs sont requis",
-        
-        // Quiz
-        quiz_title: "Trouvez votre produit idéal",
-        quiz_question_1: "Quel est votre besoin principal ?",
-        quiz_question_2: "Quelle quantité vous intéresse ?",
-        quiz_question_3: "Quel est votre budget ?",
-        quiz_option_business: "Communication d'entreprise",
-        quiz_option_event: "Événement / Mariage",
-        quiz_option_art: "Art / Décoration",
-        quiz_option_marketing: "Marketing / Publicité",
-        quiz_option_small: "Petite quantité (<100)",
-        quiz_option_medium: "Moyenne quantité (100-1000)",
-        quiz_option_large: "Grande quantité (>1000)",
-        quiz_option_low: "Moins de 500 DT",
-        quiz_option_medium_budget: "500 - 2000 DT",
-        quiz_option_high: "Plus de 2000 DT",
-        quiz_prev: "Précédent",
-        quiz_next: "Suivant",
-        quiz_result: "Résultat",
-        
-        // Loyalty
-        loyalty_title: "Programme Fidélité",
-        loyalty_points: "points",
-        loyalty_next_level: "Encore {points} points pour le prochain palier",
-        loyalty_rewards: "Récompenses disponibles",
-        
-        // Notifications
-        notification_copied: "Copié dans le presse-papier !",
-        notification_added_to_cart: "Ajouté au panier",
-        notification_quote_sent: "Demande de devis envoyée"
-    },
-    
-    ar: {
-        // Navigation
-        nav_home: "الرئيسية",
-        nav_products: "المنتجات",
-        nav_contact: "اتصل بنا",
-        nav_quote: "طلب عرض سعر",
-        
-        // Hero section
-        hero_badge: "✨ التميز منذ 1995",
-        hero_title: "دار",
-        hero_title_gradient: "الفنون",
-        hero_subtitle: "أناقة الطباعة، جمال الفن",
-        hero_description: "اكتشف مجموعتنا الحصرية من منتجات الطباعة الفاخرة",
-        hero_btn_products: "اكتشف منتجاتنا",
-        hero_btn_contact: "اتصل بنا",
-        hero_scroll: "مرر لأسفل",
-        
-        // Section produits
-        products_tag: "كتالوجنا",
-        products_title: "منتجاتنا",
-        products_title_highlight: "الاستثنائية",
-        products_subtitle: "إبداعات فريدة لجميع احتياجات الطباعة الخاصة بك",
-        
-        // Filtres
-        filter_all: "الكل",
-        filter_stationery: "القرطاسية",
-        filter_advertising: "الإعلانات",
-        filter_luxury: "الفخامة",
-        filter_art: "الفن والتصميم",
-        
-        // Produits
-        product_details: "اعرف المزيد",
-        product_price_from: "ابتداء من",
-        
-        // Stats
-        stats_clients: "عملاء راضون",
-        stats_projects: "مشاريع منجزة",
-        stats_years: "سنوات من الخبرة",
-        stats_partners: "شركاء",
-        
-        // Contact
-        contact_tag: "اتصل بنا",
-        contact_title: "تحدث عن",
-        contact_title_highlight: "مشروعك",
-        contact_description: "فريقنا في انتظاركم لتلبية جميع احتياجات الطباعة الخاصة بكم.",
-        contact_address: "العنوان",
-        contact_phone: "الهاتف",
-        contact_email: "البريد الإلكتروني",
-        contact_hours: "ساعات العمل",
-        contact_form_name: "الاسم الكامل",
-        contact_form_email: "البريد الإلكتروني",
-        contact_form_phone: "الهاتف",
-        contact_form_subject: "الموضوع",
-        contact_form_message: "رسالتك",
-        contact_form_submit: "إرسال الرسالة",
-        contact_form_quote: "طلب عرض سعر",
-        contact_form_info: "طلب معلومات",
-        contact_form_appointment: "تحديد موعد",
-        contact_form_other: "أخرى",
-        
-        // Footer
-        footer_about: "شريككم المفضل لجميع احتياجات الطباعة منذ 1995.",
-        footer_quick_links: "روابط سريعة",
-        footer_newsletter: "النشرة البريدية",
-        footer_newsletter_placeholder: "بريدك الإلكتروني",
-        footer_newsletter_btn: "اشتراك",
-        footer_copyright: "جميع الحقوق محفوظة",
-        
-        // Assistant AI
-        ai_welcome: "مرحباً! أنا مساعد دار الفنون",
-        ai_help: "كيف يمكنني مساعدتك؟",
-        ai_products: "📋 المنتجات",
-        ai_prices: "💰 الأسعار",
-        ai_quote: "📄 عرض سعر",
-        ai_deadlines: "⏱️ المواعيد",
-        ai_contact: "📍 اتصل بنا",
-        
-        // Messages
-        msg_success: "تم إرسال الرسالة بنجاح!",
-        msg_error: "حدث خطأ",
-        msg_newsletter_success: "تم الاشتراك بنجاح!",
-        msg_email_invalid: "بريد إلكتروني غير صالح",
-        msg_fields_required: "جميع الحقول مطلوبة",
-        
-        // Quiz
-        quiz_title: "ابحث عن منتجك المثالي",
-        quiz_question_1: "ما هي حاجتك الرئيسية؟",
-        quiz_question_2: "ما هي الكمية التي تهمك؟",
-        quiz_question_3: "ما هي ميزانيتك؟",
-        quiz_option_business: "اتصالات الشركات",
-        quiz_option_event: "مناسبات / زفاف",
-        quiz_option_art: "فن / ديكور",
-        quiz_option_marketing: "تسويق / إعلانات",
-        quiz_option_small: "كمية صغيرة (<100)",
-        quiz_option_medium: "كمية متوسطة (100-1000)",
-        quiz_option_large: "كمية كبيرة (>1000)",
-        quiz_option_low: "أقل من 500 دينار",
-        quiz_option_medium_budget: "500 - 2000 دينار",
-        quiz_option_high: "أكثر من 2000 دينار",
-        quiz_prev: "السابق",
-        quiz_next: "التالي",
-        quiz_result: "النتيجة",
-        
-        // Loyalty
-        loyalty_title: "برنامج الولاء",
-        loyalty_points: "نقطة",
-        loyalty_next_level: "تبقى {points} نقطة للمستوى التالي",
-        loyalty_rewards: "المكافآت المتاحة",
-        
-        // Notifications
-        notification_copied: "تم النسخ!",
-        notification_added_to_cart: "تمت الإضافة إلى السلة",
-        notification_quote_sent: "تم إرسال طلب عرض السعر"
-    },
-    
-    en: {
-        // Navigation
-        nav_home: "Home",
-        nav_products: "Products",
-        nav_contact: "Contact",
-        nav_quote: "Quote",
-        
-        // Hero section
-        hero_badge: "✨ Excellence since 1995",
-        hero_title: "Dar El",
-        hero_title_gradient: "Founoun",
-        hero_subtitle: "The elegance of printing, the beauty of art",
-        hero_description: "Discover our exclusive collection of premium printing products",
-        hero_btn_products: "Discover our products",
-        hero_btn_contact: "Contact us",
-        hero_scroll: "Scroll",
-        
-        // Section produits
-        products_tag: "Our Catalog",
-        products_title: "Our",
-        products_title_highlight: "Exceptional Products",
-        products_subtitle: "Unique creations for all your printing needs",
-        
-        // Filtres
-        filter_all: "All",
-        filter_stationery: "Stationery",
-        filter_advertising: "Advertising",
-        filter_luxury: "Luxury",
-        filter_art: "Art & Design",
-        
-        // Produits
-        product_details: "Learn more",
-        product_price_from: "From",
-        
-        // Stats
-        stats_clients: "Happy Clients",
-        stats_projects: "Projects Completed",
-        stats_years: "Years of Expertise",
-        stats_partners: "Partners",
-        
-        // Contact
-        contact_tag: "Contact Us",
-        contact_title: "Let's Talk About",
-        contact_title_highlight: "Your Project",
-        contact_description: "Our team is here for all your printing needs.",
-        contact_address: "Address",
-        contact_phone: "Phone",
-        contact_email: "Email",
-        contact_hours: "Hours",
-        contact_form_name: "Full Name",
-        contact_form_email: "Email",
-        contact_form_phone: "Phone",
-        contact_form_subject: "Subject",
-        contact_form_message: "Your Message",
-        contact_form_submit: "Send Message",
-        contact_form_quote: "Quote Request",
-        contact_form_info: "Information Request",
-        contact_form_appointment: "Appointment",
-        contact_form_other: "Other",
-        
-        // Footer
-        footer_about: "Your trusted partner for all your printing needs since 1995.",
-        footer_quick_links: "Quick Links",
-        footer_newsletter: "Newsletter",
-        footer_newsletter_placeholder: "Your email",
-        footer_newsletter_btn: "Subscribe",
-        footer_copyright: "All rights reserved",
-        
-        // Assistant AI
-        ai_welcome: "Hello! I'm Dar El Founoun's assistant",
-        ai_help: "How can I help you?",
-        ai_products: "📋 Products",
-        ai_prices: "💰 Prices",
-        ai_quote: "📄 Quote",
-        ai_deadlines: "⏱️ Deadlines",
-        ai_contact: "📍 Contact",
-        
-        // Messages
-        msg_success: "Message sent successfully!",
-        msg_error: "An error occurred",
-        msg_newsletter_success: "Subscription successful!",
-        msg_email_invalid: "Invalid email",
-        msg_fields_required: "All fields are required",
-        
-        // Quiz
-        quiz_title: "Find Your Ideal Product",
-        quiz_question_1: "What is your main need?",
-        quiz_question_2: "What quantity interests you?",
-        quiz_question_3: "What is your budget?",
-        quiz_option_business: "Business Communication",
-        quiz_option_event: "Event / Wedding",
-        quiz_option_art: "Art / Decoration",
-        quiz_option_marketing: "Marketing / Advertising",
-        quiz_option_small: "Small quantity (<100)",
-        quiz_option_medium: "Medium quantity (100-1000)",
-        quiz_option_large: "Large quantity (>1000)",
-        quiz_option_low: "Less than 500 DT",
-        quiz_option_medium_budget: "500 - 2000 DT",
-        quiz_option_high: "More than 2000 DT",
-        quiz_prev: "Previous",
-        quiz_next: "Next",
-        quiz_result: "Result",
-        
-        // Loyalty
-        loyalty_title: "Loyalty Program",
-        loyalty_points: "points",
-        loyalty_next_level: "{points} more points to next level",
-        loyalty_rewards: "Available Rewards",
-        
-        // Notifications
-        notification_copied: "Copied to clipboard!",
-        notification_added_to_cart: "Added to cart",
-        notification_quote_sent: "Quote request sent"
-    }
-};
+// ai-assistant.js - Version multilingue corrigée
+(function() {
+    'use strict';
 
-// Exporter pour utilisation globale
-window.translations = translations;
-window.currentLanguage = localStorage.getItem('language') || 'fr';
+    let currentLang = 'fr';
+    let isTyping = false;
+    let elements = {};
+
+    // Base de connaissances multilingue
+    const KNOWLEDGE_BASE = {
+        fr: {
+            greeting: {
+                patterns: ['bonjour', 'salut', 'hello', 'hi', 'coucou', 'hey', 'bonsoir'],
+                response: "👋 Bonjour ! Je suis l'assistant virtuel de Dar El Founoun. Je peux vous aider à découvrir nos produits, obtenir des prix, faire un devis, ou répondre à vos questions. Comment puis-je vous aider ?"
+            },
+            products: {
+                patterns: ['produit', 'catalogue', 'proposez', 'vendez', 'services', 'offrez', 'gamme'],
+                response: "🎨 Dar El Founoun propose une large gamme de produits d'impression :\n\n📋 **Papeterie** : Cartes de visite, enveloppes, blocs notes, papier à en-tête\n📢 **Publicitaire** : Flyers, roll-ups, bâches, panneaux LED, goodies\n💎 **Luxe** : Catalogues, faire-parts, albums photo, emballages premium\n🖼️ **Art & Design** : Affiches, toiles d'art, posters, livres d'art\n\nQuel type de produit vous intéresse ?"
+            },
+            price_cards: {
+                patterns: ['carte de visite', 'cartes de visite', 'prix carte', 'tarif carte'],
+                response: "📇 **Cartes de visite premium**\n\n• Papier luxe 350g\n• Finition mate ou brillante au choix\n• Impression recto-verso incluse\n• Vernis sélectif disponible\n• Dès **50 DT** pour 100 cartes"
+            },
+            price_flyers: {
+                patterns: ['flyer', 'flyers', 'dépliant', 'prospectus', 'tract'],
+                response: "📄 **Flyers publicitaires**\n\n• Format A5 (148x210mm)\n• Papier couché 135g à 300g\n• Impression recto ou recto-verso\n• Dès **80 DT** pour 1000 exemplaires"
+            },
+            price_rollup: {
+                patterns: ['roll-up', 'rollup', 'stand', 'bannière'],
+                response: "🎪 **Roll-up professionnel**\n\n• Format 85x200cm\n• Structure aluminium robuste\n• Sacoche de transport incluse\n• Dès **120 DT**"
+            },
+            deadlines: {
+                patterns: ['délai', 'delai', 'livraison', 'temps', 'dure', 'quand'],
+                response: "⏱️ **Délais de production**\n\n• Standard : **3 à 7 jours ouvrés**\n• Grandes quantités : **10 à 14 jours**\n• Express : **48h** (selon disponibilité)"
+            },
+            contact: {
+                patterns: ['contact', 'joindre', 'téléphone', 'email', 'adresse', 'coordonnées'],
+                response: "📞 **Nos coordonnées**\n\n📍 **Adresse** : 12 Rue de la Liberté, Centre Urbain Nord, Tunis\n\n📱 **Téléphone** : +216 71 123 456 / +216 98 765 432\n\n✉️ **Email** : contact@darelfounoun.tn\n\n🕐 **Horaires** : Lun-Ven 8h30-18h, Sam 9h-13h"
+            },
+            quote: {
+                patterns: ['devis', 'devi', 'estimation', 'devis gratuit'],
+                response: "📋 **Demande de devis personnalisé**\n\nPour obtenir un devis, merci de nous préciser :\n1️⃣ Type de produit souhaité\n2️⃣ Quantité approximative\n3️⃣ Format / dimensions\n4️⃣ Finitions souhaitées\n\nVous pouvez remplir le formulaire de contact sur notre site."
+            },
+            thanks: {
+                patterns: ['merci', 'thanks', 'thank', 'super', 'génial'],
+                response: "🙏 Merci beaucoup ! N'hésitez pas si vous avez d'autres questions. Bonne journée ! ✨"
+            },
+            goodbye: {
+                patterns: ['au revoir', 'bye', 'adieu', 'à plus', 'ciao'],
+                response: "👋 Au revoir ! Merci d'avoir visité Dar El Founoun. À bientôt !"
+            }
+        },
+        ar: {
+            greeting: {
+                patterns: ['مرحبا', 'السلام', 'اهلا', 'صباح'],
+                response: "👋 مرحبا! أنا المساعد الافتراضي لدار الفنون. يمكنني مساعدتك في اكتشاف منتجاتنا، الحصول على الأسعار، طلب عرض سعر، أو الإجابة على أسئلتك. كيف يمكنني مساعدتك؟"
+            },
+            products: {
+                patterns: ['منتج', 'كتالوج', 'تقدمون', 'خدمات'],
+                response: "🎨 تقدم دار الفنون مجموعة واسعة من منتجات الطباعة:\n\n📋 **القرطاسية**: بطاقات العمل، الأظرف، دفاتر الملاحظات\n📢 **الإعلانات**: المنشورات، الرول آب، اللوحات الإعلانية\n💎 **الفخامة**: الكتالوجات، بطاقات الدعوة، ألبومات الصور\n🖼️ **الفن والتصميم**: الملصقات، اللوحات الفنية، كتب الفن"
+            },
+            price_cards: {
+                patterns: ['بطاقة عمل', 'بطاقات عمل', 'سعر بطاقة'],
+                response: "📇 **بطاقات العمل الفاخرة**\n\n• ورق فاخر 350 جرام\n• لمسة غير لامعة أو لامعة\n• طباعة وجهين\n• ابتداء من **50 دينار** لـ 100 بطاقة"
+            },
+            price_flyers: {
+                patterns: ['منشور', 'منشورات', 'مطوية'],
+                response: "📄 **المنشورات الإعلانية**\n\n• مقاس A5\n• ورق مطلي 135 جرام\n• طباعة وجه واحد أو وجهين\n• ابتداء من **80 دينار** لـ 1000 نسخة"
+            },
+            price_rollup: {
+                patterns: ['رول آب', 'رولاب', 'stand'],
+                response: "🎪 **رول آب احترافي**\n\n• مقاس 85x200 سم\n• هيكل ألمنيوم متين\n• حقيبة حمل متضمنة\n• ابتداء من **120 دينار**"
+            },
+            deadlines: {
+                patterns: ['موعد', 'تسليم', 'وقت', 'مدة'],
+                response: "⏱️ **مواعيد الإنتاج**\n\n• عادي: **3 إلى 7 أيام عمل**\n• كميات كبيرة: **10 إلى 14 يوم**\n• سريع: **48 ساعة** (حسب التوفر)"
+            },
+            contact: {
+                patterns: ['اتصل', 'هاتف', 'بريد', 'عنوان', 'إحداثيات'],
+                response: "📞 **إحداثياتنا**\n\n📍 **العنوان**: 12 نهج الحرية، المركز العمراني الشمالي، تونس\n\n📱 **الهاتف**: +216 71 123 456 / +216 98 765 432\n\n✉️ **البريد**: contact@darelfounoun.tn\n\n🕐 **الساعات**: الإثنين-الجمعة 8:30-18:00، السبت 9:00-13:00"
+            },
+            quote: {
+                patterns: ['عرض سعر', 'سعر', 'تقييم'],
+                response: "📋 **طلب عرض سعر مخصص**\n\nللحصول على عرض سعر، يرجى تحديد:\n1️⃣ نوع المنتج المطلوب\n2️⃣ الكمية التقريبية\n3️⃣ الحجم / الأبعاد\n4️⃣ التشطيبات المطلوبة\n\nيمكنك ملء نموذج الاتصال على موقعنا."
+            },
+            thanks: {
+                patterns: ['شكرا', 'شكر', 'ممتاز', 'رائع'],
+                response: "🙏 شكرا جزيلا! لا تتردد في الاتصال بنا إذا كان لديك أي أسئلة أخرى. يوم سعيد! ✨"
+            },
+            goodbye: {
+                patterns: ['مع السلامة', 'الى اللقاء', 'باي'],
+                response: "👋 مع السلامة! شكرا لزيارة دار الفنون. إلى اللقاء!"
+            }
+        },
+        en: {
+            greeting: {
+                patterns: ['hello', 'hi', 'hey', 'good morning', 'good evening'],
+                response: "👋 Hello! I'm Dar El Founoun's virtual assistant. I can help you discover our products, get prices, request a quote, or answer your questions. How can I help you today?"
+            },
+            products: {
+                patterns: ['product', 'catalog', 'offer', 'provide', 'services'],
+                response: "🎨 Dar El Founoun offers a wide range of printing products:\n\n📋 **Stationery**: Business cards, envelopes, notebooks, letterhead\n📢 **Advertising**: Flyers, roll-ups, banners, LED panels, goodies\n💎 **Luxury**: Catalogs, invitations, photo albums, premium packaging\n🖼️ **Art & Design**: Posters, art canvases, art books\n\nWhat type of product interests you?"
+            },
+            price_cards: {
+                patterns: ['business card', 'cards', 'price card'],
+                response: "📇 **Premium Business Cards**\n\n• Luxury 350g paper\n• Matte or glossy finish\n• Double-sided printing included\n• From **50 DT** for 100 cards"
+            },
+            price_flyers: {
+                patterns: ['flyer', 'flyers', 'leaflet', 'brochure'],
+                response: "📄 **Advertising Flyers**\n\n• A5 format (148x210mm)\n• 135g coated paper\n• One or two-sided printing\n• From **80 DT** for 1000 copies"
+            },
+            price_rollup: {
+                patterns: ['roll-up', 'rollup', 'stand', 'banner'],
+                response: "🎪 **Professional Roll-up**\n\n• 85x200cm format\n• Sturdy aluminum structure\n• Carrying bag included\n• From **120 DT**"
+            },
+            deadlines: {
+                patterns: ['deadline', 'delivery', 'time', 'duration', 'when'],
+                response: "⏱️ **Production Deadlines**\n\n• Standard: **3 to 7 business days**\n• Large quantities: **10 to 14 days**\n• Express: **48h** (subject to availability)"
+            },
+            contact: {
+                patterns: ['contact', 'phone', 'email', 'address', 'coordinates'],
+                response: "📞 **Our Coordinates**\n\n📍 **Address**: 12 Rue de la Liberté, Centre Urbain Nord, Tunis\n\n📱 **Phone**: +216 71 123 456 / +216 98 765 432\n\n✉️ **Email**: contact@darelfounoun.tn\n\n🕐 **Hours**: Mon-Fri 8:30-18:00, Sat 9:00-13:00"
+            },
+            quote: {
+                patterns: ['quote', 'estimation', 'price', 'cost'],
+                response: "📋 **Custom Quote Request**\n\nTo get a quote, please specify:\n1️⃣ Type of product\n2️⃣ Approximate quantity\n3️⃣ Format / dimensions\n4️⃣ Desired finishes\n\nYou can fill out the contact form on our website."
+            },
+            thanks: {
+                patterns: ['thank', 'thanks', 'great', 'awesome', 'perfect'],
+                response: "🙏 Thank you very much! Feel free to ask if you have any other questions. Have a great day! ✨"
+            },
+            goodbye: {
+                patterns: ['goodbye', 'bye', 'see you', 'farewell'],
+                response: "👋 Goodbye! Thank you for visiting Dar El Founoun. See you soon!"
+            }
+        }
+    };
+
+    const DEFAULT_RESPONSE = {
+        fr: "🤔 Je n'ai pas bien compris votre demande. Voici ce que je peux faire pour vous :\n\n• Vous renseigner sur nos produits\n• Vous donner les prix et délais\n• Vous aider à obtenir un devis\n• Vous donner nos coordonnées\n\nComment puis-je vous aider ?",
+        ar: "🤔 لم أفهم طلبك جيداً. إليك ما يمكنني فعله لك:\n\n• الاستعلام عن منتجاتنا\n• إعطائك الأسعار والمواعيد\n• مساعدتك في الحصول على عرض سعر\n• إعطائك إحداثياتنا\n\nكيف يمكنني مساعدتك؟",
+        en: "🤔 I didn't quite understand your request. Here's what I can do for you:\n\n• Inform you about our products\n• Give you prices and deadlines\n• Help you get a quote\n• Give you our contact information\n\nHow can I help you?"
+    };
+
+    function cleanText(text) {
+        return text.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function getBestResponse(message) {
+        const cleanMessage = cleanText(message);
+        const kb = KNOWLEDGE_BASE[currentLang] || KNOWLEDGE_BASE.fr;
+        
+        for (const [key, data] of Object.entries(kb)) {
+            if (data.patterns) {
+                for (const pattern of data.patterns) {
+                    if (cleanMessage.includes(cleanText(pattern))) {
+                        return data.response;
+                    }
+                }
+            }
+        }
+        
+        return (DEFAULT_RESPONSE[currentLang] || DEFAULT_RESPONSE.fr);
+    }
+
+    function updateLanguage(lang) {
+        if (lang === 'ar' || lang === 'en' || lang === 'fr') {
+            currentLang = lang;
+            updateUILanguage();
+        }
+    }
+
+    function updateUILanguage() {
+        const t = getUITranslations();
+        
+        const headerTitle = document.querySelector('.ai-chat-header h3');
+        if (headerTitle) {
+            headerTitle.innerHTML = `<i class="fas fa-robot"></i> ${t.title}`;
+        }
+        
+        const input = document.getElementById('aiInput');
+        if (input) input.placeholder = t.placeholder;
+        
+        const suggestionBtns = document.querySelectorAll('.ai-suggestion-btn');
+        const suggestions = ['ai_products', 'ai_prices', 'ai_quote', 'ai_deadlines', 'ai_contact'];
+        
+        suggestionBtns.forEach((btn, index) => {
+            if (suggestions[index] && t[suggestions[index]]) {
+                btn.innerHTML = t[suggestions[index]];
+            }
+        });
+        
+        // Mettre à jour le message de bienvenue si le chat est vide
+        const messagesContainer = document.getElementById('aiMessages');
+        if (messagesContainer && messagesContainer.children.length <= 1) {
+            const welcomeDiv = messagesContainer.querySelector('.ai-message.bot');
+            if (welcomeDiv) {
+                welcomeDiv.innerHTML = `<div class="ai-message-content">👋 ${t.welcome}<br><br>${t.help}</div>`;
+            }
+        }
+    }
+
+    function getUITranslations() {
+        const uiTranslations = {
+            fr: {
+                title: "Assistant Dar El Founoun",
+                placeholder: "Écrivez votre message...",
+                welcome: "Bonjour ! Je suis l'assistant de Dar El Founoun",
+                help: "Comment puis-je vous aider ?",
+                ai_products: "📋 Produits",
+                ai_prices: "💰 Prix",
+                ai_quote: "📄 Devis",
+                ai_deadlines: "⏱️ Délais",
+                ai_contact: "📍 Contact"
+            },
+            ar: {
+                title: "مساعد دار الفنون",
+                placeholder: "اكتب رسالتك...",
+                welcome: "مرحباً! أنا مساعد دار الفنون",
+                help: "كيف يمكنني مساعدتك؟",
+                ai_products: "📋 المنتجات",
+                ai_prices: "💰 الأسعار",
+                ai_quote: "📄 عرض سعر",
+                ai_deadlines: "⏱️ المواعيد",
+                ai_contact: "📍 اتصل بنا"
+            },
+            en: {
+                title: "Dar El Founoun Assistant",
+                placeholder: "Write your message...",
+                welcome: "Hello! I'm Dar El Founoun's assistant",
+                help: "How can I help you?",
+                ai_products: "📋 Products",
+                ai_prices: "💰 Prices",
+                ai_quote: "📄 Quote",
+                ai_deadlines: "⏱️ Deadlines",
+                ai_contact: "📍 Contact"
+            }
+        };
+        return uiTranslations[currentLang] || uiTranslations.fr;
+    }
+
+    function scrollToBottom() {
+        if (elements.messages) {
+            elements.messages.scrollTop = elements.messages.scrollHeight;
+        }
+    }
+
+    function addMessage(text, sender) {
+        if (!elements.messages) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `ai-message ${sender}`;
+        const formattedText = text.replace(/\n/g, '<br>');
+        messageDiv.innerHTML = `<div class="ai-message-content">${formattedText}</div>`;
+        
+        elements.messages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+
+    function showTypingIndicator() {
+        removeTypingIndicator();
+        
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'ai-message bot';
+        typingDiv.id = 'aiTypingIndicator';
+        typingDiv.innerHTML = `
+            <div class="ai-typing">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        `;
+        
+        if (elements.messages) {
+            elements.messages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.getElementById('aiTypingIndicator');
+        if (indicator) indicator.remove();
+    }
+
+    function sendMessage(message) {
+        if (!message || message.trim() === '' || isTyping) return;
+        
+        const cleanMsg = message.trim();
+        addMessage(cleanMsg, 'user');
+        
+        if (elements.input) {
+            elements.input.value = '';
+        }
+        
+        showTypingIndicator();
+        isTyping = true;
+        
+        setTimeout(() => {
+            removeTypingIndicator();
+            const response = getBestResponse(cleanMsg);
+            addMessage(response, 'bot');
+            isTyping = false;
+        }, 600);
+    }
+
+    function init() {
+        // Attendre que le DOM soit prêt
+        setTimeout(() => {
+            elements = {
+                toggle: document.getElementById('aiToggle'),
+                chatWindow: document.getElementById('aiChatWindow'),
+                close: document.getElementById('aiClose'),
+                input: document.getElementById('aiInput'),
+                send: document.getElementById('aiSend'),
+                messages: document.getElementById('aiMessages')
+            };
+            
+            if (!elements.toggle || !elements.chatWindow) {
+                console.log('Assistant AI non trouvé dans le DOM');
+                return;
+            }
+            
+            // Mettre à jour la langue depuis localStorage
+            const savedLang = localStorage.getItem('language');
+            if (savedLang && (savedLang === 'ar' || savedLang === 'en' || savedLang === 'fr')) {
+                currentLang = savedLang;
+            }
+            
+            updateUILanguage();
+            
+            // Événements
+            elements.toggle.addEventListener('click', () => {
+                elements.chatWindow.classList.toggle('open');
+                if (elements.chatWindow.classList.contains('open')) {
+                    setTimeout(() => elements.input.focus(), 300);
+                    scrollToBottom();
+                }
+            });
+            
+            if (elements.close) {
+                elements.close.addEventListener('click', () => {
+                    elements.chatWindow.classList.remove('open');
+                });
+            }
+            
+            if (elements.send) {
+                elements.send.addEventListener('click', () => {
+                    sendMessage(elements.input.value);
+                });
+            }
+            
+            if (elements.input) {
+                elements.input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendMessage(elements.input.value);
+                    }
+                });
+            }
+            
+            // Suggestions
+            const suggestionBtns = document.querySelectorAll('.ai-suggestion-btn');
+            suggestionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const msg = btn.getAttribute('data-msg');
+                    if (msg) sendMessage(msg);
+                });
+            });
+            
+            // Ouverture automatique
+            setTimeout(() => {
+                if (!localStorage.getItem('aiAssistantSeen')) {
+                    elements.chatWindow.classList.add('open');
+                    localStorage.setItem('aiAssistantSeen', 'true');
+                    scrollToBottom();
+                }
+            }, 3000);
+            
+            console.log('Assistant AI initialisé - Langue:', currentLang);
+        }, 500);
+    }
+
+    // Exporter les fonctions globalement
+    window.aiAssistant = {
+        updateLanguage: updateLanguage,
+        sendMessage: sendMessage,
+        getCurrentLang: () => currentLang
+    };
+    
+    // Démarrer
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
