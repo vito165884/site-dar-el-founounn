@@ -1,5 +1,5 @@
 <?php
-// save_contact.php - Version sans colonne formspree_sent
+// save_contact.php - Version corrigée
 require_once 'config.php';
 
 header('Content-Type: application/json');
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// Configuration Formspree
+// Configuration Formspree - REMPLACE PAR TON ID FORMSPREE
 $FORMSPREE_ENDPOINT = 'https://formspree.io/f/xaqlpewe';
 
 // Récupération des données
@@ -54,13 +54,15 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
 
 $formspreeResponse = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
 curl_close($ch);
 
-if ($httpCode === 200) {
+if ($httpCode === 200 || $httpCode === 302) {
     $formspreeSent = true;
-    $messages[] = '✅ Email envoyé via Formspree';
+    $messages[] = 'Email envoyé avec succès';
 } else {
-    $messages[] = '⚠️ Envoi email échoué (message sauvegardé en base)';
+    $messages[] = 'Email non envoyé (sauvegardé en base)';
+    error_log("Formspree error: HTTP $httpCode - $curlError");
 }
 
 // ========== 2. SAUVEGARDE DANS LA BASE DE DONNÉES ==========
@@ -69,9 +71,10 @@ $pdo = getDBConnection();
 if ($pdo) {
     try {
         // Vérifier si la colonne formspree_sent existe
-        $columns = $pdo->query("SHOW COLUMNS FROM contacts")->fetchAll(PDO::FETCH_COLUMN);
+        $result = $pdo->query("SHOW COLUMNS FROM contacts LIKE 'formspree_sent'");
+        $hasFormspreeColumn = $result->rowCount() > 0;
         
-        if (in_array('formspree_sent', $columns)) {
+        if ($hasFormspreeColumn) {
             // Version avec formspree_sent
             $stmt = $pdo->prepare("
                 INSERT INTO contacts (name, email, phone, subject, message, ip_address, formspree_sent) 
@@ -91,22 +94,26 @@ if ($pdo) {
         
         if ($result) {
             $dbSaved = true;
-            $messages[] = '✅ Données enregistrées en base';
+            $messages[] = 'Message sauvegardé en base';
         } else {
-            $messages[] = '❌ Erreur enregistrement base';
+            $messages[] = 'Erreur sauvegarde base';
         }
         
     } catch (PDOException $e) {
-        $messages[] = '❌ Erreur DB: ' . $e->getMessage();
+        $messages[] = 'Erreur DB: ' . $e->getMessage();
         error_log("Erreur MySQL: " . $e->getMessage());
     }
 } else {
-    $messages[] = '❌ Connexion base impossible';
+    $messages[] = 'Connexion base impossible';
 }
 
+// Vérifier si on a réussi au moins une des deux actions
 $success = ($formspreeSent || $dbSaved);
+
 echo json_encode([
     'success' => $success,
-    'message' => implode(' | ', $messages)
+    'message' => implode(' - ', $messages),
+    'formspree_sent' => $formspreeSent,
+    'db_saved' => $dbSaved
 ]);
 ?>
