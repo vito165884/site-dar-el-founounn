@@ -5,7 +5,18 @@ require_once 'config.php';
 $pdo = getDBConnection();
 
 if (!$pdo) {
-    die("❌ Erreur de connexion à la base de données");
+    die("
+    <!DOCTYPE html>
+    <html>
+    <head><title>Erreur</title></head>
+    <body style='font-family: Arial; padding: 50px; text-align: center;'>
+        <h1>❌ Erreur de connexion à la base de données</h1>
+        <p>Vérifiez que MySQL est démarré dans XAMPP/WAMP</p>
+        <p>Base de données: dar_elfounoun</p>
+        <a href='test_db.php' style='color: #e67e22;'>▶ Tester la connexion</a>
+    </body>
+    </html>
+    ");
 }
 
 // Compter les enregistrements
@@ -33,8 +44,8 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
         .stat-card i { font-size: 2rem; color: #e67e22; margin-bottom: 0.5rem; }
         .stat-number { font-size: 2rem; font-weight: 800; color: #1e293b; }
         .stat-label { color: #64748b; }
-        .tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; }
-        .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; color: #64748b; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; flex-wrap: wrap; }
+        .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; color: #64748b; transition: 0.3s; }
         .tab-btn.active { color: #e67e22; border-bottom: 2px solid #e67e22; margin-bottom: -2px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -48,13 +59,14 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
         .badge-warning { background: #fed7aa; color: #9a3412; }
         .back-link { display: inline-block; margin-top: 2rem; color: #e67e22; text-decoration: none; }
         .btn-refresh { background: #e67e22; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+        .empty-state { text-align: center; padding: 3rem; color: #64748b; }
         @media (max-width: 768px) { body { padding: 1rem; } th, td { padding: 0.5rem; font-size: 0.8rem; } }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>
-            <span><i class="fas fa-database"></i> Base de données - Dar El Founoun</span>
+            <span><i class="fas fa-database"></i> Dashboard - Dar El Founoun</span>
             <button class="btn-refresh" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Actualiser</button>
         </h1>
         
@@ -74,10 +86,15 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
                 <div class="stat-number"><?= $todayContacts ?></div>
                 <div class="stat-label">Messages aujourd'hui</div>
             </div>
+            <div class="stat-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <div class="stat-number"><?= $pdo->query("SELECT COUNT(*) FROM contacts WHERE subject = 'devis'")->fetchColumn() ?></div>
+                <div class="stat-label">Demandes de devis</div>
+            </div>
         </div>
         
         <div class="tabs">
-            <button class="tab-btn active" data-tab="contacts"><i class="fas fa-envelope"></i> Messages (<?= $totalContacts ?>)</button>
+            <button class="tab-btn active" data-tab="contacts"><i class="fas fa-envelope"></i> Demandes d'information (<?= $totalContacts ?>)</button>
             <button class="tab-btn" data-tab="newsletter"><i class="fas fa-users"></i> Newsletter (<?= $totalNewsletter ?>)</button>
         </div>
         
@@ -85,7 +102,7 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr><th>ID</th><th>Nom</th><th>Email</th><th>Téléphone</th><th>Sujet</th><th>Message</th><th>Date</th><th>Formspree</th></tr>
+                        <tr><th>ID</th><th>Nom</th><th>Email</th><th>Téléphone</th><th>Sujet</th><th>Message</th><th>Date</th><th>Statut</th></tr>
                     </thead>
                     <tbody>
                         <?php if (count($contacts) > 0): ?>
@@ -95,22 +112,31 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
                                 <td><strong><?= htmlspecialchars($c['name']) ?></strong></td>
                                 <td><?= htmlspecialchars($c['email']) ?></td>
                                 <td><?= htmlspecialchars($c['phone'] ?: '-') ?></td>
-                                <td><?= htmlspecialchars($c['subject'] ?: '-') ?></td>
+                                <td>
+                                    <?php 
+                                    $subjectLabel = '';
+                                    if ($c['subject'] == 'devis') $subjectLabel = '📄 Demande de devis';
+                                    elseif ($c['subject'] == 'information') $subjectLabel = 'ℹ️ Information';
+                                    elseif ($c['subject'] == 'rdv') $subjectLabel = '📅 Rendez-vous';
+                                    else $subjectLabel = htmlspecialchars($c['subject'] ?: '-');
+                                    echo $subjectLabel;
+                                    ?>
+                                 </td>
                                 <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($c['message']) ?>">
-                                    <?= htmlspecialchars(mb_substr($c['message'], 0, 50)) ?>...
-                                </td>
+                                    <?= htmlspecialchars(mb_substr($c['message'], 0, 80)) ?>...
+                                 </td>
                                 <td><?= date('d/m/Y H:i', strtotime($c['created_at'])) ?></td>
                                 <td>
-                                    <?php if ($c['formspree_sent']): ?>
+                                    <?php if (isset($c['formspree_sent']) && $c['formspree_sent']): ?>
                                         <span class="badge badge-success"><i class="fas fa-check"></i> Envoyé</span>
                                     <?php else: ?>
                                         <span class="badge badge-warning"><i class="fas fa-clock"></i> En attente</span>
                                     <?php endif; ?>
-                                </td>
-                            </tr>
+                                 </td>
+                             </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="8" style="text-align: center; padding: 3rem;">Aucun message pour le moment</td></tr>
+                             <tr><td colspan="8" class="empty-state">📭 Aucun message pour le moment</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -120,26 +146,26 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
         <div id="newsletter-tab" class="tab-content">
             <div class="table-container">
                 <table>
-                    <thead><tr><th>ID</th><th>Email</th><th>IP</th><th>Date</th><th>Formspree</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Email</th><th>IP</th><th>Date</th><th>Statut</th></tr></thead>
                     <tbody>
                         <?php if (count($newsletters) > 0): ?>
                             <?php foreach ($newsletters as $n): ?>
-                            <tr>
-                                <td><?= $n['id'] ?></td>
-                                <td><strong><?= htmlspecialchars($n['email']) ?></strong></td>
-                                <td><?= htmlspecialchars($n['ip_address'] ?: '-') ?></td>
-                                <td><?= date('d/m/Y H:i', strtotime($n['created_at'])) ?></td>
-                                <td>
-                                    <?php if ($n['formspree_sent']): ?>
-                                        <span class="badge badge-success">✅ Envoyé</span>
+                             <tr>
+                                 <td><?= $n['id'] ?></td>
+                                 <td><strong><?= htmlspecialchars($n['email']) ?></strong></td>
+                                 <td><?= htmlspecialchars($n['ip_address'] ?: '-') ?></td>
+                                 <td><?= date('d/m/Y H:i', strtotime($n['created_at'])) ?></td>
+                                 <td>
+                                    <?php if (isset($n['formspree_sent']) && $n['formspree_sent']): ?>
+                                        <span class="badge badge-success">✅ Inscrit</span>
                                     <?php else: ?>
-                                        <span class="badge badge-warning">⏳ En attente</span>
+                                        <span class="badge badge-success">✅ Actif</span>
                                     <?php endif; ?>
-                                </td>
-                            </tr>
+                                 </td>
+                             </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="5" style="text-align: center; padding: 3rem;">Aucun abonné newsletter</td></tr>
+                             <tr><td colspan="5" class="empty-state">📭 Aucun abonné newsletter</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -149,10 +175,10 @@ $newsletters = $pdo->query("SELECT * FROM newsletter ORDER BY created_at DESC LI
         <div style="margin-top: 2rem; padding: 1rem; background: #e3f2fd; border-radius: 12px;">
             <h4><i class="fas fa-info-circle"></i> Informations :</h4>
             <ul style="margin-left: 1.5rem;">
-                <li>✅ Messages avec badge "Envoyé" = bien transmis à Formspree</li>
-                <li>⚠️ Messages avec badge "En attente" = uniquement en base</li>
-                <li>📧 Formspree : <a href="https://formspree.io/login" target="_blank">https://formspree.io/login</a></li>
-                <li>🗄️ phpMyAdmin : <a href="http://localhost/phpmyadmin" target="_blank">http://localhost/phpmyadmin</a></li>
+                <li>📋 <strong>Demandes de devis</strong> : Sujet "Demande de devis"</li>
+                <li>ℹ️ <strong>Demandes d'information</strong> : Sujet "Demande d'information"</li>
+                <li>📅 <strong>Rendez-vous</strong> : Sujet "Prise de rendez-vous"</li>
+                <li>📧 Les messages sont sauvegardés en base de données</li>
             </ul>
         </div>
         
